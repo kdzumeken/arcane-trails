@@ -34,7 +34,7 @@ namespace SunTemple
 
             if (!DoorCollider)
             {
-                Debug.LogWarning(this.GetType().Name + ".cs on " + gameObject.name + "door has no collider", gameObject);
+                Debug.LogWarning(this.GetType().Name + ".cs on " + gameObject.name + " door has no collider", gameObject);
                 scriptIsEnabled = false;
                 return;
             }
@@ -86,7 +86,16 @@ namespace SunTemple
 
         void TryToOpen()
         {
-            if (Mathf.Abs(Vector3.Distance(transform.position, Player.transform.position)) <= MaxDistance)
+            Vector3 playerPosition = Player.transform.position;
+
+            // Get the closest point on the collider to the player
+            Vector3 closestPoint = DoorCollider.ClosestPoint(playerPosition);
+
+            // Calculate the distance from the player to the closest point
+            float distanceToDoor = Vector3.Distance(playerPosition, closestPoint);
+
+            // Check if the player is within the max distance of the door
+            if (distanceToDoor <= MaxDistance)
             {
                 Ray ray = Cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
                 RaycastHit hit;
@@ -103,7 +112,16 @@ namespace SunTemple
 
         void CursorHint()
         {
-            if (Mathf.Abs(Vector3.Distance(transform.position, Player.transform.position)) <= MaxDistance)
+            Vector3 playerPosition = Player.transform.position;
+
+            // Get the closest point on the collider to the player
+            Vector3 closestPoint = DoorCollider.ClosestPoint(playerPosition);
+
+            // Calculate the distance from the player to the closest point
+            float distanceToDoor = Vector3.Distance(playerPosition, closestPoint);
+
+            // Check if the player is within the max distance of the door
+            if (distanceToDoor <= MaxDistance)
             {
                 Ray ray = Cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
                 RaycastHit hit;
