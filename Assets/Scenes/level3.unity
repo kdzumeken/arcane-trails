@@ -1526,6 +1526,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotasiKecepatan: 5
   rotasiBatasVertikal: 70
+--- !u!4 &232547953 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8875505713406267301, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+  m_PrefabInstance: {fileID: 952923006}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &255920138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5577,9 +5582,17 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 1386596313562079236, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+      propertyPath: jumpForce
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386596313562079236, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+      propertyPath: headTransform
+      value: 
+      objectReference: {fileID: 232547953}
     - target: {fileID: 8846981458306253309, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       propertyPath: m_Height
-      value: 2.1574361
+      value: 1.9894397
       objectReference: {fileID: 0}
     - target: {fileID: 8846981458306253309, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       propertyPath: m_Radius
@@ -5587,15 +5600,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8846981458306253309, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       propertyPath: m_Center.x
-      value: -0.000000005690079
+      value: 0.00000008423894
       objectReference: {fileID: 0}
     - target: {fileID: 8846981458306253309, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       propertyPath: m_Center.y
-      value: 0.92096704
+      value: 1.0049717
       objectReference: {fileID: 0}
     - target: {fileID: 8846981458306253309, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       propertyPath: m_Center.z
-      value: 0.35587955
+      value: 0.35587963
       objectReference: {fileID: 0}
     - target: {fileID: 8873248633326703021, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       propertyPath: m_Name
@@ -7826,7 +7839,7 @@ GameObject:
   - component: {fileID: 1210481514}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
