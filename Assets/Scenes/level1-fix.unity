@@ -20509,6 +20509,14 @@ PrefabInstance:
       propertyPath: headTransform
       value: 
       objectReference: {fileID: 1850940202}
+    - target: {fileID: 1386596313562079236, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 1838253253}
+    - target: {fileID: 1386596313562079236, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+      propertyPath: kameraTransform
+      value: 
+      objectReference: {fileID: 1838253253}
     - target: {fileID: 8846981458306253309, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       propertyPath: m_Height
       value: 1.9894397
@@ -20635,6 +20643,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8874265301708032999, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1850940203}
+    - targetCorrespondingSourceObject: {fileID: 2915835852547364468, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1838253256}
   m_SourcePrefab: {fileID: 100100000, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
 --- !u!1001 &1208877712
 PrefabInstance:
@@ -22293,15 +22304,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4849110386653482, guid: 08a468d3721f9b442b4fdaf7f1aabb1d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.073
+      value: 10.342
       objectReference: {fileID: 0}
     - target: {fileID: 4849110386653482, guid: 08a468d3721f9b442b4fdaf7f1aabb1d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.035
+      value: 1.596
       objectReference: {fileID: 0}
     - target: {fileID: 4849110386653482, guid: 08a468d3721f9b442b4fdaf7f1aabb1d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.987
+      value: -8.147
       objectReference: {fileID: 0}
     - target: {fileID: 4849110386653482, guid: 08a468d3721f9b442b4fdaf7f1aabb1d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -22360,6 +22371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Apple
+  outlineMaterial: {fileID: 2100000, guid: b6505fd9919e96a4d9757f6377139993, type: 2}
 --- !u!135 &1295415034
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -31541,6 +31553,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8460917321318470221, guid: 3964c23ae9838e84889ea6d65b5861aa, type: 3}
   m_PrefabInstance: {fileID: 1830665651}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1838253252 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2915835852547364468, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+  m_PrefabInstance: {fileID: 1208656898}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1838253253 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6363252450122962564, guid: ade464bdb04a4ac47b1f420701c7c57f, type: 3}
+  m_PrefabInstance: {fileID: 1208656898}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1838253256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838253252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14d78650c9027a46b3647e539287e09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 5
+  minAngle: 35
+  maxAngle: 125
 --- !u!1001 &1846275426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31629,8 +31666,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14d78650c9027a46b3647e539287e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotasiKecepatan: 5
-  rotasiBatasVertikal: 70
+  rotationSpeed: 5
+  minAngle: -30
+  maxAngle: 30
 --- !u!114 &1850940204
 MonoBehaviour:
   m_ObjectHideFlags: 0
