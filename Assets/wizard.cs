@@ -5,42 +5,52 @@ using UnityEngine;
 public class Wizard : MonoBehaviour
 {
     Animator anim;
-    float kecepatan = 3f;
-    float rotasiKecepatan = 2f;
+    public float kecepatan = 3f;
+    public float rotasiKecepatan = 5f;
+    private Vector3 moveAmount;
+
+    // Referensi untuk kepala
+    public Transform headTransform;
+    private float rotasiHorizontal = 0f;
 
     void Start()
     {
         anim = this.GetComponent<Animator>();
-        this.transform.rotation = Quaternion.Euler(new Vector3(0, 30, 0));
-        Debug.Log("Rotasi Hero: " + this.transform.eulerAngles.y);
     }
 
     void Update()
     {
+        // Input pergerakan karakter
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
+        // Hitung arah pergerakan relatif terhadap kamera
+        Vector3 moveInput = new Vector3(h, 0f, v).normalized;
+        Vector3 forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+        Vector3 right = Vector3.ProjectOnPlane(Camera.main.transform.right, Vector3.up).normalized;
+        Vector3 targetMoveDirection = (forward * moveInput.z + right * moveInput.x).normalized;
+
+        // Cek jika ada input untuk pergerakan
         if (h != 0 || v != 0)
         {
-            // Tentukan arah target
-            Vector3 targetDirection = new Vector3(h, 0f, v);
-            targetDirection = Camera.main.transform.TransformDirection(targetDirection);
-            targetDirection.y = 0.0f;
+            // Smooth movement menggunakan Vector3.Lerp
+            Vector3 targetVelocity = targetMoveDirection * kecepatan;
+            moveAmount = Vector3.Lerp(moveAmount, targetVelocity, Time.deltaTime * 10f);
+            transform.position += moveAmount * Time.deltaTime;
 
-            // Rotasi secara bertahap menggunakan Slerp
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, targetRotation, Time.deltaTime * rotasiKecepatan);
-
-            // Pergerakan karakter dengan arah input
-            Vector3 moveDirection = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up) * v +
-                                    Vector3.ProjectOnPlane(Camera.main.transform.right, Vector3.up) * h;
-            this.transform.position += moveDirection.normalized * Time.deltaTime * kecepatan;
-
-            anim.SetBool("jalan", true);
+            anim.SetBool("jalan", true); // Trigger animasi jalan
         }
         else
         {
-            anim.SetBool("jalan", false);
+            // Smoothly stop movement
+            moveAmount = Vector3.Lerp(moveAmount, Vector3.zero, Time.deltaTime * 10f);
+            transform.position += moveAmount * Time.deltaTime;
+            anim.SetBool("jalan", false); // Stop walking animation
         }
+
+        // Rotasi tubuh berdasarkan input mouse horizontal (sumbu Y)
+        float mouseX = Input.GetAxis("Mouse X");
+        rotasiHorizontal += mouseX * rotasiKecepatan;
+        transform.rotation = Quaternion.Euler(0f, rotasiHorizontal, 0f);
     }
 }
