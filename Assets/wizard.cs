@@ -1,155 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Wizard : MonoBehaviour
 {
     Animator anim;
-    public float kecepatan = 3f;
-    public float rotasiKecepatan = 5f;
-    public float kecepatanLari = 6f; // Kecepatan saat berlari
-    public float jumpForce = 5f; // Kekuatan lompatan
-    private Vector3 moveAmount;
-    private Rigidbody rb;
-
-    // Referensi untuk kepala
-    public Transform headTransform;
-    private float rotasiHorizontal = 0f;
-
-    // Crosshair
-    [SerializeField] private Image crosshair;
-
-    // Referensi untuk objek yang disorot
-    private InteractableObject highlightedObject;
+    float kecepatan = 3f;
+    float rotasiKecepatan = 2f;
 
     void Start()
     {
         anim = this.GetComponent<Animator>();
-        rb = this.GetComponent<Rigidbody>();
-
-        // Lock the cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        // Create crosshair if not assigned in Inspector
-        if (crosshair == null)
-        {
-            GameObject crosshairObject = new GameObject("Crosshair");
-            crosshairObject.transform.SetParent(GameObject.Find("Canvas").transform);
-            crosshair = crosshairObject.AddComponent<Image>();
-            crosshair.rectTransform.sizeDelta = new Vector2(20, 20);
-            crosshair.color = Color.white;
-
-            // Set crosshair image (you can replace this with your own crosshair sprite)
-            crosshair.sprite = Resources.Load<Sprite>("CrosshairSprite");
-            crosshair.rectTransform.anchoredPosition = Vector2.zero;
-        }
+        this.transform.rotation = Quaternion.Euler(new Vector3(0, 30, 0));
+        Debug.Log("Rotasi Hero: " + this.transform.eulerAngles.y);
     }
 
     void Update()
     {
-        HandleMovement();
-        HandleInteraction();
-    }
-
-    void HandleMovement()
-    {
-        // Input pergerakan karakter
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        // Hitung arah pergerakan relatif terhadap kamera
-        Vector3 moveInput = new Vector3(h, 0f, v).normalized;
-        Vector3 forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
-        Vector3 right = Vector3.ProjectOnPlane(Camera.main.transform.right, Vector3.up).normalized;
-        Vector3 targetMoveDirection = (forward * moveInput.z + right * moveInput.x).normalized;
-
-        // Cek jika ada input untuk pergerakan
         if (h != 0 || v != 0)
         {
-            bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-            float currentSpeed = isRunning ? kecepatanLari : kecepatan;
+            // Tentukan arah target
+            Vector3 targetDirection = new Vector3(h, 0f, v);
+            targetDirection = Camera.main.transform.TransformDirection(targetDirection);
+            targetDirection.y = 0.0f;
 
-            Vector3 targetVelocity = targetMoveDirection * currentSpeed;
-            moveAmount = Vector3.Lerp(moveAmount, targetVelocity, Time.deltaTime * 10f);
-            transform.position += moveAmount * Time.deltaTime;
+            // Rotasi secara bertahap menggunakan Slerp
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, targetRotation, Time.deltaTime * rotasiKecepatan);
 
-            anim.SetBool("jalan", !isRunning);
-            anim.SetBool("lari", isRunning);
+            // Pergerakan karakter dengan arah input
+            Vector3 moveDirection = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up) * v +
+                                    Vector3.ProjectOnPlane(Camera.main.transform.right, Vector3.up) * h;
+            this.transform.position += moveDirection.normalized * Time.deltaTime * kecepatan;
+
+            anim.SetBool("jalan", true);
         }
         else
         {
-            moveAmount = Vector3.Lerp(moveAmount, Vector3.zero, Time.deltaTime * 10f);
-            transform.position += moveAmount * Time.deltaTime;
             anim.SetBool("jalan", false);
-            anim.SetBool("lari", false);
         }
-
-        // Rotasi tubuh berdasarkan input mouse horizontal (sumbu Y)
-        float mouseX = Input.GetAxis("Mouse X");
-        rotasiHorizontal += mouseX * rotasiKecepatan;
-        transform.rotation = Quaternion.Euler(0f, rotasiHorizontal, 0f);
-
-        // Cek jika tombol spasi ditekan untuk lompat
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
-    }
-
-    void HandleInteraction()
-    {
-        // Raycast dari kamera untuk mendeteksi objek yang dapat diinteraksi
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 5f)) // Radius interaksi = 5 unit
-        {
-            InteractableObject interactable = hit.collider.GetComponent<InteractableObject>();
-
-            if (interactable != null)
-            {
-                highlightedObject = interactable;
-
-                // Jika tombol kiri mouse ditekan
-                if (Input.GetMouseButtonDown(0)) // 0 = klik kiri
-                {
-                    Inventory inventory = FindObjectOfType<Inventory>();
-                    if (inventory != null)
-                    {
-                        inventory.AddItem(interactable.itemName);
-                        Destroy(interactable.gameObject); // Hapus objek setelah diambil
-                        Debug.Log($"Item '{interactable.itemName}' ditambahkan ke inventory.");
-                    }
-                }
-            }
-        }
-        else
-        {
-            highlightedObject = null;
-        }
-    }
-
-    void Jump()
-    {
-        if (IsGrounded())
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            anim.SetTrigger("lompat");
-        }
-    }
-
-    bool IsGrounded()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
-        {
-            if (hit.collider.CompareTag("Ground"))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }
