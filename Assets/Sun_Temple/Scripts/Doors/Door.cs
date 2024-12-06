@@ -4,19 +4,21 @@ using UnityEngine;
 
 namespace SunTemple
 {
+   
+
     public class Door : MonoBehaviour
     {
-        public bool IsLocked = false;
+		public bool IsLocked = false;
         public bool DoorClosed = true;
         public float OpenRotationAmount = 90;
         public float RotationSpeed = 1f;
         public float MaxDistance = 3.0f;
-        public string playerTag = "Player";
-        private Collider DoorCollider;
+		public string playerTag = "Player";
+		private Collider DoorCollider;
 
-        private GameObject Player;
-        private Camera Cam;
-        private CursorManager cursor;
+		private GameObject Player;
+		private Camera Cam;
+		private CursorManager cursor;
 
         Vector3 StartRotation;
         float StartAngle = 0;
@@ -25,124 +27,103 @@ namespace SunTemple
         float CurrentLerpTime = 0;
         bool Rotating;
 
-        private bool scriptIsEnabled = true;
 
-        void Start()
-        {
-            StartRotation = transform.localEulerAngles;
-            DoorCollider = GetComponent<BoxCollider>();
+		private bool scriptIsEnabled = true;
 
-            if (!DoorCollider)
-            {
-                Debug.LogWarning(this.GetType().Name + ".cs on " + gameObject.name + " door has no collider", gameObject);
-                scriptIsEnabled = false;
-                return;
-            }
 
-            Player = GameObject.FindGameObjectWithTag(playerTag);
 
-            if (!Player)
-            {
-                Debug.LogWarning(this.GetType().Name + ".cs on " + this.name + ", No object tagged with " + playerTag + " found in Scene", gameObject);
-                scriptIsEnabled = false;
-                return;
-            }
+        void Start(){
+            StartRotation = transform.localEulerAngles ;
+			DoorCollider = GetComponent<BoxCollider> ();
 
-            Cam = Camera.main;
-            if (!Cam)
-            {
-                Debug.LogWarning(this.GetType().Name + ", No objects tagged with MainCamera in Scene", gameObject);
-                scriptIsEnabled = false;
-            }
+			if (!DoorCollider) {
+				Debug.LogWarning (this.GetType ().Name + ".cs on " + gameObject.name + "door has no collider", gameObject);
+				scriptIsEnabled = false;
+				return;
+			}
 
-            cursor = CursorManager.instance;
+			Player = GameObject.FindGameObjectWithTag (playerTag);
 
-            if (cursor != null)
-            {
-                cursor.SetCursorToDefault();
-            }
+			if (!Player) {
+				Debug.LogWarning (this.GetType ().Name + ".cs on " + this.name + ", No object tagged with " + playerTag + " found in Scene", gameObject);
+				scriptIsEnabled = false;
+				return;
+			}
+
+			Cam = Camera.main;
+			if (!Cam) {
+				Debug.LogWarning (this.GetType ().Name + ", No objects tagged with MainCamera in Scene", gameObject);
+				scriptIsEnabled = false;
+			}
+		
+			cursor = CursorManager.instance;
+
+			if (cursor != null) {
+				cursor.SetCursorToDefault ();
+			}
+
+					
         }
 
-        void Update()
-        {
-            if (scriptIsEnabled)
-            {
-                if (Rotating)
-                {
-                    Rotate();
-                }
 
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    TryToOpen();
-                }
 
-                if (cursor != null)
-                {
-                    CursorHint();
-                }
-            }
-        }
+		void Update()
+		{
+			if (scriptIsEnabled) {
+				if (Rotating) {
+					Rotate ();
+				}
 
-        void TryToOpen()
-        {
-            Vector3 playerPosition = Player.transform.position;
+				if (Input.GetKeyDown (KeyCode.Mouse0)) {
+					TryToOpen ();
+				}
 
-            // Get the closest point on the collider to the player
-            Vector3 closestPoint = DoorCollider.ClosestPoint(playerPosition);
 
-            // Calculate the distance from the player to the closest point
-            float distanceToDoor = Vector3.Distance(playerPosition, closestPoint);
+				if (cursor != null) {
+					CursorHint ();
+				}
+			}
 
-            // Check if the player is within the max distance of the door
-            if (distanceToDoor <= MaxDistance)
-            {
-                Ray ray = Cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-                RaycastHit hit;
+		} 
 
-                if (DoorCollider.Raycast(ray, out hit, MaxDistance))
-                {
-                    if (IsLocked == false)
-                    {
-                        Activate();
-                    }
-                }
-            }
-        }
 
-        void CursorHint()
-        {
-            Vector3 playerPosition = Player.transform.position;
 
-            // Get the closest point on the collider to the player
-            Vector3 closestPoint = DoorCollider.ClosestPoint(playerPosition);
 
-            // Calculate the distance from the player to the closest point
-            float distanceToDoor = Vector3.Distance(playerPosition, closestPoint);
+		void TryToOpen(){
+			if (Mathf.Abs(Vector3.Distance(transform.position, Player.transform.position)) <= MaxDistance){	
 
-            // Check if the player is within the max distance of the door
-            if (distanceToDoor <= MaxDistance)
-            {
-                Ray ray = Cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-                RaycastHit hit;
+				Ray ray = Cam.ScreenPointToRay (new Vector3 (Screen.width / 2, Screen.height / 2, 0));
+				RaycastHit hit;
+											
+				if (DoorCollider.Raycast(ray, out hit, MaxDistance)){					
+					if (IsLocked == false){
+						Activate ();
+					}
+				}
+			}
+		}
 
-                if (DoorCollider.Raycast(ray, out hit, MaxDistance))
-                {
-                    if (IsLocked == false)
-                    {
-                        cursor.SetCursorToDoor();
-                    }
-                    else if (IsLocked == true)
-                    {
-                        cursor.SetCursorToLocked();
-                    }
-                }
-                else
-                {
-                    cursor.SetCursorToDefault();
-                }
-            }
-        }
+
+
+		void CursorHint(){
+			if (Mathf.Abs(Vector3.Distance(transform.position, Player.transform.position)) <= MaxDistance){	
+				Ray ray = Cam.ScreenPointToRay (new Vector3 (Screen.width / 2, Screen.height / 2, 0));
+				RaycastHit hit;
+
+				if (DoorCollider.Raycast (ray, out hit, MaxDistance)) {
+					if (IsLocked == false) {
+						cursor.SetCursorToDoor ();
+					} else if (IsLocked == true) {
+						cursor.SetCursorToLocked ();
+					}					
+				} else {
+					cursor.SetCursorToDefault ();
+				}
+			}
+		}
+
+
+
 
         public void Activate()
         {
@@ -151,6 +132,12 @@ namespace SunTemple
             else
                 Close();
         }
+
+
+
+       
+
+
 
         void Rotate()
         {
@@ -165,31 +152,37 @@ namespace SunTemple
             float _Angle = CircularLerp.Clerp(StartAngle, EndAngle, _Perc);
             transform.localEulerAngles = new Vector3(transform.eulerAngles.x, _Angle, transform.eulerAngles.z);
 
-            if (CurrentLerpTime == LerpTime)
-            {
-                Rotating = false;
-                DoorCollider.enabled = true;
-            }
+			if (CurrentLerpTime == LerpTime) {
+				Rotating = false;
+				DoorCollider.enabled = true;
+			}
+              
+           
         }
+
+
 
         void Open()
         {
-            DoorCollider.enabled = false;
+			DoorCollider.enabled = false;
             DoorClosed = false;
             StartAngle = transform.localEulerAngles.y;
-            EndAngle = StartRotation.y + OpenRotationAmount;
+            EndAngle =  StartRotation.y + OpenRotationAmount;
             CurrentLerpTime = 0;
             Rotating = true;
         }
 
+
+
         void Close()
         {
-            DoorCollider.enabled = false;
+			DoorCollider.enabled = false;
             DoorClosed = true;
             StartAngle = transform.localEulerAngles.y;
             EndAngle = transform.localEulerAngles.y - OpenRotationAmount;
             CurrentLerpTime = 0;
             Rotating = true;
         }
+
     }
 }
