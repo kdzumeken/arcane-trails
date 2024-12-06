@@ -8,11 +8,14 @@ public class Gate : MonoBehaviour
     public bool GateClosed = true;
     public float OpenRotationAmount = 90f; // Sudut rotasi untuk membuka daun pagar
     public float RotationSpeed = 1f;
-    public float MaxDistance = 3.0f;
+    public float MaxDistance = 5.0f;
     public string playerTag = "Player";
 
     public Transform LeftGate;  // Referensi ke Pintu Kiri
     public Transform RightGate; // Referensi ke Pintu Kanan
+
+    private BoxCollider LeftGateCollider;
+    private BoxCollider RightGateCollider;
 
     private GameObject Player;
     private Camera Cam;
@@ -21,11 +24,11 @@ public class Gate : MonoBehaviour
     private float CurrentLerpTime = 0f;
     private float LerpTime = 1f;
 
-    private Quaternion LeftGateStartRotation;
-    private Quaternion RightGateStartRotation;
+    private float LeftGateStartAngle;
+    private float RightGateStartAngle;
 
-    private Quaternion LeftGateEndRotation;
-    private Quaternion RightGateEndRotation;
+    private float LeftGateEndAngle;
+    private float RightGateEndAngle;
 
     void Start()
     {
@@ -39,8 +42,11 @@ public class Gate : MonoBehaviour
 
         Cam = Camera.main;
 
-        LeftGateStartRotation = LeftGate.localRotation;
-        RightGateStartRotation = RightGate.localRotation;
+        LeftGateStartAngle = LeftGate.localEulerAngles.y;
+        RightGateStartAngle = RightGate.localEulerAngles.y;
+
+        LeftGateCollider = LeftGate.GetComponent<BoxCollider>();
+        RightGateCollider = RightGate.GetComponent<BoxCollider>();
     }
 
     void Update()
@@ -58,8 +64,18 @@ public class Gate : MonoBehaviour
 
     void TryToOpen()
     {
-        Vector3 midpoint = (LeftGate.position + RightGate.position) / 2;
-        if (Vector3.Distance(midpoint, Player.transform.position) <= MaxDistance)
+        Vector3 playerPosition = Player.transform.position;
+
+        // Get the closest points on the colliders to the player
+        Vector3 closestPointLeftGate = LeftGateCollider.ClosestPoint(playerPosition);
+        Vector3 closestPointRightGate = RightGateCollider.ClosestPoint(playerPosition);
+
+        // Calculate the distances from the player to the closest points
+        float distanceToLeftGate = Vector3.Distance(playerPosition, closestPointLeftGate);
+        float distanceToRightGate = Vector3.Distance(playerPosition, closestPointRightGate);
+
+        // Check if the player is within the max distance of either gate
+        if (distanceToLeftGate <= MaxDistance || distanceToRightGate <= MaxDistance)
         {
             if (!IsLocked)
             {
@@ -88,8 +104,11 @@ public class Gate : MonoBehaviour
         float _Perc = CurrentLerpTime / LerpTime;
 
         // Menggunakan Lerp untuk menginterpolasi rotasi dari posisi awal ke posisi akhir secara smooth
-        LeftGate.localRotation = Quaternion.Lerp(LeftGateStartRotation, LeftGateEndRotation, _Perc);
-        RightGate.localRotation = Quaternion.Lerp(RightGateStartRotation, RightGateEndRotation, _Perc);
+        float leftGateAngle = Mathf.Lerp(LeftGateStartAngle, LeftGateEndAngle, _Perc);
+        float rightGateAngle = Mathf.Lerp(RightGateStartAngle, RightGateEndAngle, _Perc);
+
+        LeftGate.localEulerAngles = new Vector3(LeftGate.localEulerAngles.x, leftGateAngle, LeftGate.localEulerAngles.z);
+        RightGate.localEulerAngles = new Vector3(RightGate.localEulerAngles.x, rightGateAngle, RightGate.localEulerAngles.z);
 
         if (CurrentLerpTime == LerpTime)
         {
@@ -103,8 +122,8 @@ public class Gate : MonoBehaviour
         CurrentLerpTime = 0;
 
         // Tentukan rotasi akhir untuk kedua daun pintu agar terbuka bersamaan
-        LeftGateEndRotation = LeftGateStartRotation * Quaternion.Euler(0, -OpenRotationAmount, 0);  // Pintu kiri membuka ke kiri
-        RightGateEndRotation = RightGateStartRotation * Quaternion.Euler(0, OpenRotationAmount, 0); // Pintu kanan membuka ke kanan
+        LeftGateEndAngle = LeftGateStartAngle + OpenRotationAmount;  // Pintu kiri membuka ke kanan
+        RightGateEndAngle = RightGateStartAngle - OpenRotationAmount; // Pintu kanan membuka ke kiri
 
         Rotating = true;
     }
@@ -115,8 +134,8 @@ public class Gate : MonoBehaviour
         CurrentLerpTime = 0;
 
         // Kembali ke rotasi awal saat menutup
-        LeftGateEndRotation = LeftGateStartRotation;
-        RightGateEndRotation = RightGateStartRotation;
+        LeftGateEndAngle = LeftGateStartAngle;
+        RightGateEndAngle = RightGateStartAngle;
 
         Rotating = true;
     }

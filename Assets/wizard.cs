@@ -6,16 +6,15 @@ public class Wizard : MonoBehaviour
 {
     Animator anim;
     public float kecepatan = 3f;
-    public float kecepatanLari = 6f; // Kecepatan saat berlari
     public float rotasiKecepatan = 5f;
-    public float kekuatanLompat = 5f; // Kekuatan lompatan
+    public float kecepatanLari = 6f; // Kecepatan saat berlari
+    public float jumpForce = 5f; // Kekuatan lompatan
     private Vector3 moveAmount;
+    private Rigidbody rb;
 
     // Referensi untuk kepala
     public Transform headTransform;
     private float rotasiHorizontal = 0f;
-
-    private Rigidbody rb; // Rigidbody untuk lompat
 
     void Start()
     {
@@ -35,19 +34,20 @@ public class Wizard : MonoBehaviour
         Vector3 right = Vector3.ProjectOnPlane(Camera.main.transform.right, Vector3.up).normalized;
         Vector3 targetMoveDirection = (forward * moveInput.z + right * moveInput.x).normalized;
 
-        // Kecepatan sesuai apakah sedang lari atau tidak
-        float kecepatanAktual = Input.GetKey(KeyCode.LeftShift) ? kecepatanLari : kecepatan;
-
         // Cek jika ada input untuk pergerakan
         if (h != 0 || v != 0)
         {
+            // Cek jika tombol Shift ditekan untuk berlari
+            bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            float currentSpeed = isRunning ? kecepatanLari : kecepatan;
+
             // Smooth movement menggunakan Vector3.Lerp
-            Vector3 targetVelocity = targetMoveDirection * kecepatanAktual;
+            Vector3 targetVelocity = targetMoveDirection * currentSpeed;
             moveAmount = Vector3.Lerp(moveAmount, targetVelocity, Time.deltaTime * 10f);
             transform.position += moveAmount * Time.deltaTime;
 
-            anim.SetBool("jalan", true); // Trigger animasi jalan
-            anim.SetBool("lari", Input.GetKey(KeyCode.LeftShift)); // Trigger animasi lari jika Shift ditekan
+            anim.SetBool("jalan", !isRunning); // Trigger animasi jalan jika tidak berlari
+            anim.SetBool("lari", isRunning); // Trigger animasi lari jika berlari
         }
         else
         {
@@ -63,18 +63,52 @@ public class Wizard : MonoBehaviour
         rotasiHorizontal += mouseX * rotasiKecepatan;
         transform.rotation = Quaternion.Euler(0f, rotasiHorizontal, 0f);
 
-        // Lompatan jika Space ditekan dan karakter di tanah
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        // Cek jika tombol spasi ditekan untuk lompat
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.AddForce(Vector3.up * kekuatanLompat, ForceMode.Impulse);
-            anim.SetTrigger("lompat"); // Trigger animasi lompat
+            Jump();
         }
     }
 
-    // Cek apakah karakter berada di tanah
+    void Jump()
+    {
+        // Cek jika karakter berada di tanah sebelum melompat
+        if (IsGrounded())
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            anim.SetTrigger("lompat"); // Trigger animasi lompat
+            StartCoroutine(ResetJumpTrigger());
+        }
+    }
+
+    IEnumerator ResetJumpTrigger()
+    {
+        // Tunggu hingga animasi lompat selesai
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+
+        // Reset trigger lompat
+        anim.ResetTrigger("lompat");
+
+        // Debug log to check if the coroutine is running
+        Debug.Log("ResetJumpTrigger coroutine running");
+
+        // Kembali ke animasi yang sesuai
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            anim.SetBool("jalan", !isRunning);
+            anim.SetBool("lari", isRunning);
+        }
+        else
+        {
+            anim.SetBool("jalan", false);
+            anim.SetBool("lari", false);
+        }
+    }
+
     bool IsGrounded()
     {
-        // Raycast ke bawah untuk memeriksa jika karakter di tanah
+        // Cek jika karakter berada di tanah menggunakan raycast
         return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
 }
