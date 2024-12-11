@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Wizard : MonoBehaviour
 {
@@ -17,43 +16,13 @@ public class Wizard : MonoBehaviour
     public Transform headTransform;
     private float rotasiHorizontal = 0f;
 
-    // Crosshair
-    [SerializeField] private Image crosshair;
-
-    // Referensi untuk objek yang disorot
-    private InteractableObject highlightedObject;
-
     void Start()
     {
         anim = this.GetComponent<Animator>();
         rb = this.GetComponent<Rigidbody>();
-
-        // Lock the cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        // Create crosshair if not assigned in Inspector
-        if (crosshair == null)
-        {
-            GameObject crosshairObject = new GameObject("Crosshair");
-            crosshairObject.transform.SetParent(GameObject.Find("Canvas").transform);
-            crosshair = crosshairObject.AddComponent<Image>();
-            crosshair.rectTransform.sizeDelta = new Vector2(20, 20);
-            crosshair.color = Color.white;
-
-            // Set crosshair image (you can replace this with your own crosshair sprite)
-            crosshair.sprite = Resources.Load<Sprite>("CrosshairSprite");
-            crosshair.rectTransform.anchoredPosition = Vector2.zero;
-        }
     }
 
     void Update()
-    {
-        HandleMovement();
-        HandleInteraction();
-    }
-
-    void HandleMovement()
     {
         // Input pergerakan karakter
         float h = Input.GetAxis("Horizontal");
@@ -68,22 +37,25 @@ public class Wizard : MonoBehaviour
         // Cek jika ada input untuk pergerakan
         if (h != 0 || v != 0)
         {
+            // Cek jika tombol Shift ditekan untuk berlari
             bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
             float currentSpeed = isRunning ? kecepatanLari : kecepatan;
 
+            // Smooth movement menggunakan Vector3.Lerp
             Vector3 targetVelocity = targetMoveDirection * currentSpeed;
             moveAmount = Vector3.Lerp(moveAmount, targetVelocity, Time.deltaTime * 10f);
             transform.position += moveAmount * Time.deltaTime;
 
-            anim.SetBool("jalan", !isRunning);
-            anim.SetBool("lari", isRunning);
+            anim.SetBool("jalan", !isRunning); // Trigger animasi jalan jika tidak berlari
+            anim.SetBool("lari", isRunning); // Trigger animasi lari jika berlari
         }
         else
         {
+            // Smoothly stop movement
             moveAmount = Vector3.Lerp(moveAmount, Vector3.zero, Time.deltaTime * 10f);
             transform.position += moveAmount * Time.deltaTime;
-            anim.SetBool("jalan", false);
-            anim.SetBool("lari", false);
+            anim.SetBool("jalan", false); // Stop walking animation
+            anim.SetBool("lari", false); // Stop running animation
         }
 
         // Rotasi tubuh berdasarkan input mouse horizontal (sumbu Y)
@@ -98,58 +70,45 @@ public class Wizard : MonoBehaviour
         }
     }
 
-    void HandleInteraction()
-    {
-        // Raycast dari kamera untuk mendeteksi objek yang dapat diinteraksi
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 5f)) // Radius interaksi = 5 unit
-        {
-            InteractableObject interactable = hit.collider.GetComponent<InteractableObject>();
-
-            if (interactable != null)
-            {
-                highlightedObject = interactable;
-
-                // Jika tombol kiri mouse ditekan
-                if (Input.GetMouseButtonDown(0)) // 0 = klik kiri
-                {
-                    Inventory inventory = FindObjectOfType<Inventory>();
-                    if (inventory != null)
-                    {
-                        inventory.AddItem(interactable.itemName);
-                        Destroy(interactable.gameObject); // Hapus objek setelah diambil
-                        Debug.Log($"Item '{interactable.itemName}' ditambahkan ke inventory.");
-                    }
-                }
-            }
-        }
-        else
-        {
-            highlightedObject = null;
-        }
-    }
-
     void Jump()
     {
+        // Cek jika karakter berada di tanah sebelum melompat
         if (IsGrounded())
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            anim.SetTrigger("lompat");
+            anim.SetTrigger("lompat"); // Trigger animasi lompat
+            StartCoroutine(ResetJumpTrigger());
+        }
+    }
+
+    IEnumerator ResetJumpTrigger()
+    {
+        // Tunggu hingga animasi lompat selesai
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+
+        // Reset trigger lompat
+        anim.ResetTrigger("lompat");
+
+        // Debug log to check if the coroutine is running
+        Debug.Log("ResetJumpTrigger coroutine running");
+
+        // Kembali ke animasi yang sesuai
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            anim.SetBool("jalan", !isRunning);
+            anim.SetBool("lari", isRunning);
+        }
+        else
+        {
+            anim.SetBool("jalan", false);
+            anim.SetBool("lari", false);
         }
     }
 
     bool IsGrounded()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
-        {
-            if (hit.collider.CompareTag("Ground"))
-            {
-                return true;
-            }
-        }
-        return false;
+        // Cek jika karakter berada di tanah menggunakan raycast
+        return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
 }

@@ -1,34 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraRotation : MonoBehaviour
 {
-    public float rotationSpeed = 5f;  // Kecepatan rotasi kamera
-    public float minAngle = -30f;     // Batas rotasi ke bawah
-    public float maxAngle = 30f;      // Batas rotasi ke atas
+    public float rotasiKecepatan = 5f; // Kecepatan rotasi kamera
+    public float rotasiBatasVertikal = 70f; // Batas maksimal rotasi vertikal
+    private float rotasiVertikal = 0f; // Variabel untuk rotasi vertikal kamera
 
-    private float currentRotationX = 0f;  // Menyimpan rotasi vertikal saat ini
-    private float initialRotationY;       // Menyimpan rotasi horizontal awal
-    private float initialRotationZ;       // Menyimpan rotasi Z awal
+    private Transform karakterTransform; // Referensi ke transform karakter
 
     void Start()
     {
-        // Simpan rotasi awal Y dan Z
-        initialRotationY = transform.localRotation.eulerAngles.y;
-        initialRotationZ = transform.localRotation.eulerAngles.z;
+        karakterTransform = transform.parent; // Ambil referensi ke transform karakter (parent)
     }
 
     void Update()
     {
-        // Ambil input vertikal (pergerakan mouse di Y-axis)
+        // Ambil input mouse Y untuk rotasi vertikal (atas-bawah) kamera
         float mouseY = Input.GetAxis("Mouse Y");
 
-        // Hitung rotasi baru untuk vertikal kamera
-        currentRotationX -= mouseY * rotationSpeed;
+        // Update rotasi vertikal kamera (atas-bawah)
+        rotasiVertikal -= mouseY * rotasiKecepatan;
 
-        // Batasi rotasi agar tidak melebihi batas yang ditentukan
-        currentRotationX = Mathf.Clamp(currentRotationX, minAngle, maxAngle);
+        // Batasi rotasi kamera hanya sampai rotasiBatasVertikal
+        rotasiVertikal = Mathf.Clamp(rotasiVertikal, -rotasiBatasVertikal, rotasiBatasVertikal);
 
-        // Terapkan rotasi pada kamera di sumbu X, pastikan rotasi Y dan Z tetap pada nilai awal
-        transform.localRotation = Quaternion.Euler(currentRotationX, initialRotationY, initialRotationZ);
+        // Set rotasi kamera menggunakan rotasi vertikal (atas-bawah)
+        transform.localRotation = Quaternion.Euler(rotasiVertikal, 0f, 0f);
+
+        // Rotasi karakter (tubuh) mengikuti rotasi horizontal dari mouse X
+        float mouseX = Input.GetAxis("Mouse X");
+        karakterTransform.Rotate(Vector3.up * mouseX * rotasiKecepatan);
     }
 }
