@@ -1,25 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HeadRotation : MonoBehaviour
 {
-    public float rotasiKecepatan = 5f; // Kecepatan rotasi kepala
-    public float rotasiBatasVertikal = 70f; // Batas maksimal rotasi vertikal kepala
-    private float rotasiVertikal = 0f; // Variabel untuk rotasi vertikal kepala
+    public Transform head; // Referensi ke GameObject kepala
+    public float rotationSpeed = 5f; // Kecepatan rotasi
+    public float minAngle = -30f; // Batas rotasi ke bawah
+    public float maxAngle = 30f;  // Batas rotasi ke atas
 
     void Update()
     {
-        // Ambil input mouse Y untuk rotasi vertikal (atas-bawah)
-        float mouseY = Input.GetAxis("Mouse Y");
+        // Ambil input vertikal untuk rotasi atas/bawah
+        float verticalInput = Input.GetAxis("Mouse Y");
 
-        // Update rotasi vertikal kepala (atas-bawah)
-        rotasiVertikal -= mouseY * rotasiKecepatan;
+        // Rotasi kepala berdasarkan input
+        float newRotation = head.localRotation.eulerAngles.x - verticalInput * rotationSpeed;
 
-        // Batasi rotasi kepala hanya sampai rotasiBatasVertikal
-        rotasiVertikal = Mathf.Clamp(rotasiVertikal, -rotasiBatasVertikal, rotasiBatasVertikal);
+        // Batasi rotasi kepala agar tidak berlebihan
+        newRotation = Mathf.Clamp(newRotation, minAngle, maxAngle);
 
-        // Set rotasi kepala menggunakan rotasi vertikal (atas-bawah)
-        transform.localRotation = Quaternion.Euler(rotasiVertikal, 0f, 0f);
+        // Terapkan rotasi kepala
+        head.localRotation = Quaternion.Euler(newRotation, 0, 0);
     }
 }

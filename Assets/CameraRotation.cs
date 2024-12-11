@@ -1,36 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraRotation : MonoBehaviour
 {
-    public float rotasiKecepatan = 5f; // Kecepatan rotasi kamera
-    public float rotasiBatasVertikal = 70f; // Batas maksimal rotasi vertikal
-    private float rotasiVertikal = 0f; // Variabel untuk rotasi vertikal kamera
+    public float mouseSensitivity = 100f; // Sensitivitas mouse
+    public Transform playerBody;         // Referensi ke badan karakter utama
 
-    private Transform karakterTransform; // Referensi ke transform karakter
+    private float xRotation = 0f;         // Rotasi kamera di sumbu X
+    public float maxLookAngle = 80f;     // Batas maksimum pandangan ke atas dan ke bawah
 
     void Start()
     {
-        karakterTransform = transform.parent; // Ambil referensi ke transform karakter (parent)
+        // Kunci kursor di tengah layar
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-        // Ambil input mouse Y untuk rotasi vertikal (atas-bawah) kamera
-        float mouseY = Input.GetAxis("Mouse Y");
+        // Ambil input mouse
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        // Update rotasi vertikal kamera (atas-bawah)
-        rotasiVertikal -= mouseY * rotasiKecepatan;
+        // Rotasi kamera di sumbu X (atas/bawah)
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -maxLookAngle, maxLookAngle); // Batasi rotasi
 
-        // Batasi rotasi kamera hanya sampai rotasiBatasVertikal
-        rotasiVertikal = Mathf.Clamp(rotasiVertikal, -rotasiBatasVertikal, rotasiBatasVertikal);
+        // Terapkan rotasi hanya pada rotasi sumbu X tanpa memengaruhi posisi kamera
+        transform.localEulerAngles = new Vector3(xRotation, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
-        // Set rotasi kamera menggunakan rotasi vertikal (atas-bawah)
-        transform.localRotation = Quaternion.Euler(rotasiVertikal, 0f, 0f);
-
-        // Rotasi karakter (tubuh) mengikuti rotasi horizontal dari mouse X
-        float mouseX = Input.GetAxis("Mouse X");
-        karakterTransform.Rotate(Vector3.up * mouseX * rotasiKecepatan);
+        // Rotasi badan karakter di sumbu Y (kiri/kanan)
+        playerBody.Rotate(Vector3.up * mouseX);
     }
 }
