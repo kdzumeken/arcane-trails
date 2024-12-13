@@ -5,7 +5,7 @@ public class PuzzleManager : MonoBehaviour
 {
     public LampController[] lamps; // Array lampu-lampu
     public GameObject chest; // Peti yang akan terbuka
-    private List<int> correctSequence = new List<int> { 2, 1, 3, 0 }; // Urutan yang benar
+    public List<int> correctSequence = new List<int>(); // Urutan yang benar, bisa diatur di Inspector
     private List<int> playerSequence = new List<int>(); // Urutan yang dimasukkan pemain
     private bool puzzleSolved = false; // Status apakah puzzle sudah terpecahkan
 
