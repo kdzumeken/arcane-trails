@@ -1,17 +1,18 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunTemple
 {
-    public class Door : MonoBehaviour
+    public class LockedDoor : MonoBehaviour
     {
-        public bool IsLocked = false;
+        public bool IsLocked = true; // Default to locked
         public bool DoorClosed = true;
         public float OpenRotationAmount = 90;
         public float RotationSpeed = 1f;
         public float MaxDistance = 3.0f;
         public string playerTag = "Player";
+        public string requiredItem = "Key"; // Item required to unlock the door
         private Collider DoorCollider;
 
         private GameObject Player;
@@ -26,6 +27,7 @@ namespace SunTemple
         bool Rotating;
 
         private bool scriptIsEnabled = true;
+        private bool playerInRange = false;
 
         void Start()
         {
@@ -72,7 +74,7 @@ namespace SunTemple
                     Rotate();
                 }
 
-                if (Input.GetKeyDown(KeyCode.E))
+                if (playerInRange && Input.GetKeyDown(KeyCode.E))
                 {
                     TryToOpen();
                 }
@@ -84,57 +86,63 @@ namespace SunTemple
             }
         }
 
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag(playerTag))
+            {
+                playerInRange = true;
+            }
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag(playerTag))
+            {
+                playerInRange = false;
+                if (cursor != null)
+                {
+                    cursor.SetCursorToDefault();
+                }
+            }
+        }
+
         void TryToOpen()
         {
-            if (Mathf.Abs(Vector3.Distance(transform.position, Player.transform.position)) <= MaxDistance)
+            Inventory inventory = Player.GetComponent<Inventory>();
+            if (inventory != null && inventory.items.Contains(requiredItem))
             {
-                Ray ray = Cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-                RaycastHit hit;
-
-                if (DoorCollider.Raycast(ray, out hit, MaxDistance))
+                if (IsLocked)
                 {
-                    if (IsLocked == false)
-                    {
-                        Debug.Log("Door is not locked, attempting to activate.");
-                        Activate();
-                    }
-                    else
-                    {
-                        Debug.Log("Door is locked.");
-                    }
+                    Debug.Log("Player has the key, unlocking door.");
+                    IsLocked = false;
+                    Activate();
+                    // Remove the used item from the inventory
+                    inventory.items.Remove(requiredItem);
+                    Debug.Log(requiredItem + " has been used and removed from the inventory.");
                 }
                 else
                 {
-                    Debug.Log("Raycast did not hit the door collider.");
+                    Debug.Log("Door is not locked, attempting to activate.");
+                    Activate();
                 }
             }
             else
             {
-                Debug.Log("Player is too far from the door.");
+                Debug.Log("You need a " + requiredItem + " to open this door.");
             }
         }
 
         void CursorHint()
         {
-            if (Mathf.Abs(Vector3.Distance(transform.position, Player.transform.position)) <= MaxDistance)
+            if (playerInRange)
             {
-                Ray ray = Cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-                RaycastHit hit;
-
-                if (DoorCollider.Raycast(ray, out hit, MaxDistance))
+                if (IsLocked)
                 {
-                    if (IsLocked == false)
-                    {
-                        cursor.SetCursorToDoor();
-                    }
-                    else if (IsLocked == true)
-                    {
-                        cursor.SetCursorToLocked();
-                    }
+                    cursor.SetCursorToLocked();
                 }
                 else
                 {
-                    cursor.SetCursorToDefault();
+                    cursor.SetCursorToDoor();
                 }
             }
         }

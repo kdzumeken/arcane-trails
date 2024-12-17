@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace SunTemple
 {
-    public class LockedGate : MonoBehaviour
+    public class gatelampu : MonoBehaviour
     {
         public bool IsLocked = false;
         public bool DoorClosed = true;
         public float OpenHeightAmount = 3.0f; // Amount to move the gate upwards
         public float MoveSpeed = 1f;
         public string playerTag = "Player";
-        public string requiredItem = "Key"; // Item required to unlock the gate
         public List<GameObject> gates; // List of gate objects
+        public PuzzleManager puzzleManager; // Reference to the specific PuzzleManager
 
         private GameObject Player;
         private Camera Cam;
@@ -25,7 +25,6 @@ namespace SunTemple
         bool Moving;
 
         private bool scriptIsEnabled = true;
-        private bool playerInRange = false;
 
         void Start()
         {
@@ -67,6 +66,12 @@ namespace SunTemple
             {
                 cursor.SetCursorToDefault();
             }
+
+            if (puzzleManager == null)
+            {
+                Debug.LogWarning(this.GetType().Name + ".cs on " + gameObject.name + " has no PuzzleManager assigned", gameObject);
+                scriptIsEnabled = false;
+            }
         }
 
         void Update()
@@ -78,68 +83,9 @@ namespace SunTemple
                     Move();
                 }
 
-                if (playerInRange && Input.GetKeyDown(KeyCode.E))
-                {
-                    TryToOpen();
-                }
-
-                if (cursor != null)
-                {
-                    CursorHint();
-                }
-            }
-        }
-
-        void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag(playerTag))
-            {
-                playerInRange = true;
-            }
-        }
-
-        void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag(playerTag))
-            {
-                playerInRange = false;
-                if (cursor != null)
-                {
-                    cursor.SetCursorToDefault();
-                }
-            }
-        }
-
-        void TryToOpen()
-        {
-            Inventory inventory = Player.GetComponent<Inventory>();
-            if (inventory != null && inventory.items.Contains(requiredItem))
-            {
-                if (IsLocked == false)
+                if (puzzleManager.IsPuzzleSolved() && DoorClosed)
                 {
                     Activate();
-                    // Remove the used item from the inventory
-                    inventory.items.Remove(requiredItem);
-                    Debug.Log(requiredItem + " has been used and removed from the inventory.");
-                }
-            }
-            else
-            {
-                Debug.Log("You need a " + requiredItem + " to open this gate.");
-            }
-        }
-
-        void CursorHint()
-        {
-            if (playerInRange)
-            {
-                if (IsLocked == false)
-                {
-                    cursor.SetCursorToDoor();
-                }
-                else if (IsLocked == true)
-                {
-                    cursor.SetCursorToLocked();
                 }
             }
         }

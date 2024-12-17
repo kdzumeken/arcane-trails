@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace SunTemple
 {
-    public class LockedGate : MonoBehaviour
+    public class Bookshelf : MonoBehaviour
     {
         public bool IsLocked = false;
         public bool DoorClosed = true;
-        public float OpenHeightAmount = 3.0f; // Amount to move the gate upwards
+        public float OpenSideAmount = 3.0f; // Amount to move the gate sideways
         public float MoveSpeed = 1f;
         public string playerTag = "Player";
         public string requiredItem = "Key"; // Item required to unlock the gate
@@ -42,7 +42,7 @@ namespace SunTemple
             for (int i = 0; i < gates.Count; i++)
             {
                 StartPositions[i] = gates[i].transform.localPosition;
-                EndPositions[i] = StartPositions[i] + new Vector3(0, OpenHeightAmount, 0);
+                EndPositions[i] = StartPositions[i] + new Vector3(OpenSideAmount, 0, 0);
             }
 
             Player = GameObject.FindGameObjectWithTag(playerTag);
@@ -118,8 +118,7 @@ namespace SunTemple
                 if (IsLocked == false)
                 {
                     Activate();
-                    // Remove the used item from the inventory
-                    inventory.items.Remove(requiredItem);
+                    inventory.items.Remove(requiredItem); // Remove the item from the inventory
                     Debug.Log(requiredItem + " has been used and removed from the inventory.");
                 }
             }
