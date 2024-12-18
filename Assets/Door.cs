@@ -95,9 +95,22 @@ namespace SunTemple
                 {
                     if (IsLocked == false)
                     {
+                        Debug.Log("Door is not locked, attempting to activate.");
                         Activate();
                     }
+                    else
+                    {
+                        Debug.Log("Door is locked.");
+                    }
                 }
+                else
+                {
+                    Debug.Log("Raycast did not hit the door collider.");
+                }
+            }
+            else
+            {
+                Debug.Log("Player is too far from the door.");
             }
         }
 
@@ -129,9 +142,15 @@ namespace SunTemple
         public void Activate()
         {
             if (DoorClosed)
+            {
+                Debug.Log("Opening door.");
                 Open();
+            }
             else
+            {
+                Debug.Log("Closing door.");
                 Close();
+            }
         }
 
         void Rotate()
@@ -151,6 +170,7 @@ namespace SunTemple
             {
                 Rotating = false;
                 DoorCollider.enabled = true;
+                Debug.Log("Rotation complete.");
             }
         }
 
