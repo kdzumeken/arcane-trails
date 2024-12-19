@@ -40097,6 +40097,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1560906884}
     m_Modifications:
+    - target: {fileID: 3437605120229967075, guid: 9c1a88654d655b74096c2de875348419, type: 3}
+      propertyPath: m_Size.x
+      value: 2.1730003
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437605120229967075, guid: 9c1a88654d655b74096c2de875348419, type: 3}
+      propertyPath: m_Center.x
+      value: -0.14066124
+      objectReference: {fileID: 0}
     - target: {fileID: 4065981898917073906, guid: 9c1a88654d655b74096c2de875348419, type: 3}
       propertyPath: m_LocalPosition.x
       value: -18
@@ -40176,7 +40184,7 @@ MonoBehaviour:
   DoorClosed: 1
   OpenRotationAmount: 90
   RotationSpeed: 1
-  MaxDistance: 5
+  MaxDistance: 6
   playerTag: Player
   requiredItem: KeyDoor
 --- !u!1660057539 &9223372036854775807
