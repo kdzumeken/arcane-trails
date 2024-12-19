@@ -5,9 +5,23 @@ public class PuzzleManager : MonoBehaviour
 {
     public LampController[] lamps; // Array lampu-lampu
     public GameObject chest; // Peti yang akan terbuka
-    private List<int> correctSequence = new List<int> { 2, 1, 3, 0 }; // Urutan yang benar
+    public List<int> correctSequence = new List<int>(); // Urutan yang benar, bisa diatur di Inspector
     private List<int> playerSequence = new List<int>(); // Urutan yang dimasukkan pemain
     private bool puzzleSolved = false; // Status apakah puzzle sudah terpecahkan
+
+    public AudioClip lampPressSound; // Suara saat lampu ditekan
+    public AudioClip wrongSequenceSound; // Suara saat urutan salah
+    public AudioClip puzzleSolvedSound; // Suara saat puzzle terpecahkan
+    private AudioSource audioSource; // Sumber audio
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
 
     // Fungsi untuk menekan tombol pada lampu
     public void LampPressed(int lampIndex)
@@ -19,6 +33,9 @@ public class PuzzleManager : MonoBehaviour
 
         // Menyalakan lampu yang sesuai
         lamps[lampIndex].ToggleLamp();
+
+        // Mainkan suara lampu ditekan
+        PlaySound(lampPressSound);
 
         // Periksa apakah urutan pemain sudah lengkap
         if (playerSequence.Count == correctSequence.Count)
@@ -46,6 +63,7 @@ public class PuzzleManager : MonoBehaviour
         }
         else
         {
+            PlaySound(wrongSequenceSound); // Mainkan suara urutan salah
             Invoke("ResetPuzzle", 1.0f); // Reset puzzle after a delay
         }
     }
@@ -55,6 +73,7 @@ public class PuzzleManager : MonoBehaviour
     {
         puzzleSolved = true; // Menandai bahwa puzzle sudah terpecahkan
         Destroy(chest); // Menghancurkan peti (anggap peti terbuka)
+        PlaySound(puzzleSolvedSound); // Mainkan suara puzzle terpecahkan
         Debug.Log("Peti terbuka!");
     }
 
@@ -77,5 +96,14 @@ public class PuzzleManager : MonoBehaviour
     public bool IsPuzzleSolved()
     {
         return puzzleSolved;
+    }
+
+    // Fungsi untuk memainkan suara
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

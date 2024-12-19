@@ -6,12 +6,15 @@ public class LampController : MonoBehaviour
     public Color onColor; // Warna saat lampu menyala
     public Color offColor = Color.black; // Warna saat lampu mati
     private bool isOn = false; // Status lampu (Menyala/Mati)
-    private PuzzleManager puzzleManager; // Reference to the PuzzleManager
+    public PuzzleManager puzzleManager; // Reference to the PuzzleManager, assign in Inspector
 
     private void Start()
     {
-        // Find the PuzzleManager in the scene
-        puzzleManager = FindObjectOfType<PuzzleManager>();
+        // Ensure the PuzzleManager is assigned
+        if (puzzleManager == null)
+        {
+            Debug.LogError("PuzzleManager is not assigned to the LampController on " + gameObject.name);
+        }
     }
 
     // Fungsi untuk menyalakan/mematikan lampu
@@ -30,7 +33,7 @@ public class LampController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (puzzleManager.IsPuzzleSolved()) return; // Jika puzzle sudah terpecahkan, tidak bisa menekan lampu
+        if (puzzleManager == null || puzzleManager.IsPuzzleSolved()) return; // Jika puzzle sudah terpecahkan, tidak bisa menekan lampu
 
         // Find the index of this lamp in the PuzzleManager's lamps array
         int lampIndex = System.Array.IndexOf(puzzleManager.lamps, this);
