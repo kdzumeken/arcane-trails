@@ -4813,7 +4813,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 1181304590}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 1, g: 1, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1986331697}
 --- !u!1001 &331622963
@@ -5832,7 +5832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 371179619}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 0.63404846, g: 0, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 2060365011}
 --- !u!65 &371179622
@@ -7014,7 +7014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 244800650}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 1, g: 0, b: 0, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1986331697}
 --- !u!1001 &431210675
@@ -12595,7 +12595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 246765198}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 0.00012111664, g: 0, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1986331697}
 --- !u!1001 &743978272
@@ -18928,7 +18928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 132235957}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 0, g: 0.083200455, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 2060365011}
 --- !u!65 &1132182324
@@ -20359,7 +20359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Range
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Color.b
@@ -20375,7 +20375,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Intensity
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_RenderMode
@@ -20395,7 +20395,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 32
+      value: 33.069
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -20642,7 +20642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 1228561615}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 0.15285742, g: 1, b: 0, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1659787340}
 --- !u!1001 &1230145313
@@ -21413,7 +21413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 325044904}
-  onColor: {r: 0.20000002, g: 0.20000002, b: 0.20000002, a: 0}
+  onColor: {r: 1, g: 0, b: 0, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 2060365011}
 --- !u!65 &1253576650
@@ -22506,7 +22506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 1018586982}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 0, g: 0.11744833, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1659787340}
 --- !u!65 &1317596440
@@ -27613,7 +27613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 1614793648}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 1, g: 0.9477955, b: 0, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 2060365011}
 --- !u!65 &1614793651
@@ -27721,7 +27721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 421335180}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 1, g: 0.53792745, b: 0, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1659787340}
 --- !u!65 &1619025598
@@ -28456,7 +28456,7 @@ MonoBehaviour:
   - {fileID: 1317596439}
   - {fileID: 1228561616}
   chest: {fileID: 1364115490}
-  correctSequence: 00000000010000000200000003000000
+  correctSequence: 00000000030000000100000002000000
   lampPressSound: {fileID: 8300000, guid: 7905420debc5acc4994d890c8e64d07d, type: 3}
   wrongSequenceSound: {fileID: 8300000, guid: dc845450c62e8bc4480f01a7748c3d6e, type: 3}
   puzzleSolvedSound: {fileID: 8300000, guid: 7be5f7be854604445b4194ca8cc2473e, type: 3}
@@ -28559,7 +28559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 1350827411}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 0.5096946, g: 0, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1986331697}
 --- !u!1001 &1670789293
@@ -29230,7 +29230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Range
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Color.b
@@ -29246,7 +29246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Intensity
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_RenderMode
@@ -29258,7 +29258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14
+      value: -13.06
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -29266,7 +29266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 32
+      value: 33.268
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -31283,7 +31283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Range
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Color.b
@@ -31299,7 +31299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Intensity
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_RenderMode
@@ -31311,7 +31311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.5
+      value: -2.943
       objectReference: {fileID: 0}
     - target: {fileID: 7975666200123183704, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -33575,7 +33575,7 @@ MonoBehaviour:
   - {fileID: 330638632}
   - {fileID: 1667293667}
   chest: {fileID: 1489855410}
-  correctSequence: 00000000010000000200000003000000
+  correctSequence: 02000000030000000100000000000000
   lampPressSound: {fileID: 8300000, guid: 7905420debc5acc4994d890c8e64d07d, type: 3}
   wrongSequenceSound: {fileID: 8300000, guid: dc845450c62e8bc4480f01a7748c3d6e, type: 3}
   puzzleSolvedSound: {fileID: 8300000, guid: 7be5f7be854604445b4194ca8cc2473e, type: 3}
@@ -34420,7 +34420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Range
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Color.b
@@ -34436,7 +34436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_Intensity
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 857345001543193393, guid: f788699e56a01e64ebc9590bf70346c7, type: 3}
       propertyPath: m_RenderMode
@@ -35130,7 +35130,7 @@ MonoBehaviour:
   - {fileID: 1614793650}
   - {fileID: 1253576649}
   chest: {fileID: 1312116783}
-  correctSequence: 00000000010000000200000003000000
+  correctSequence: 03000000000000000100000002000000
   lampPressSound: {fileID: 8300000, guid: 7905420debc5acc4994d890c8e64d07d, type: 3}
   wrongSequenceSound: {fileID: 8300000, guid: dc845450c62e8bc4480f01a7748c3d6e, type: 3}
   puzzleSolvedSound: {fileID: 8300000, guid: 7be5f7be854604445b4194ca8cc2473e, type: 3}
@@ -35842,7 +35842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 2071471961}
-  onColor: {r: 0, g: 0, b: 0, a: 0}
+  onColor: {r: 0.63621235, g: 0, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1659787340}
 --- !u!65 &2103831620
