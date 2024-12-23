@@ -1,8 +1,11 @@
 using UnityEngine;
+using TMPro;
 
 public class InteractableObject : MonoBehaviour
 {
     public string itemName; // Nama item
+    public string displayName; // Nama yang ditampilkan di UI
+    public TextMeshProUGUI hoverText; // Referensi ke TMP Text untuk menampilkan nama item
     private Outline outline; // Referensi ke komponen Outline
 
     private void Start()
@@ -13,6 +16,12 @@ public class InteractableObject : MonoBehaviour
         {
             outline.enabled = false; // Nonaktifkan outline secara default
         }
+
+        // Nonaktifkan hoverText secara default
+        if (hoverText != null)
+        {
+            hoverText.gameObject.SetActive(false);
+        }
     }
 
     private void OnMouseEnter()
@@ -22,6 +31,13 @@ public class InteractableObject : MonoBehaviour
         {
             outline.enabled = true;
         }
+
+        // Tampilkan UI teks saat hover
+        if (hoverText != null)
+        {
+            hoverText.text = "Take " + displayName;
+            hoverText.gameObject.SetActive(true);
+        }
     }
 
     private void OnMouseExit()
@@ -30,6 +46,12 @@ public class InteractableObject : MonoBehaviour
         if (outline != null)
         {
             outline.enabled = false;
+        }
+
+        // Sembunyikan UI teks saat kursor keluar dari objek
+        if (hoverText != null)
+        {
+            hoverText.gameObject.SetActive(false);
         }
     }
 
@@ -42,5 +64,12 @@ public class InteractableObject : MonoBehaviour
             Destroy(gameObject); // Hapus objek setelah diambil
             Debug.Log($"Item '{itemName}' ditambahkan ke inventory dengan klik.");
         }
+
+        // Sembunyikan UI teks setelah item diambil
+        if (hoverText != null)
+        {
+            hoverText.gameObject.SetActive(false);
+        }
     }
 }
+
