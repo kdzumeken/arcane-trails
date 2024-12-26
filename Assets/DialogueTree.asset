@@ -55,11 +55,23 @@ MonoBehaviour:
     isFinal: 0
     isFailure: 0
   - dialogueText: welcome, new dawn.
+    options:
+    - next.
+    nextNodeIndexes: 07000000
+    isFinal: 0
+    isFailure: 0
+  - dialogueText: begone.
+    options:
+    - close
+    nextNodeIndexes: 08000000
+    isFinal: 0
+    isFailure: 0
+  - dialogueText: ...
     options: []
     nextNodeIndexes: 
     isFinal: 1
     isFailure: 0
-  - dialogueText: begone.
+  - dialogueText: ...
     options: []
     nextNodeIndexes: 
     isFinal: 0
