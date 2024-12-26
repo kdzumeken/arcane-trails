@@ -2,32 +2,14 @@ using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
 {
-    public Collider doorBlocker;  // Collider yang menghalangi pintu
-    private bool isUnlocked = false;
+    public DialogueManager dialogueManager;
 
-    private void Start()
+    void OnMouseDown()
     {
-        if (doorBlocker != null)
+        if (Vector3.Distance(transform.position, Camera.main.transform.position) < 5f)
         {
-            doorBlocker.enabled = true;  // Pintu terkunci awalnya
-        }
-    }
-
-    public void UnlockDoor()
-    {
-        isUnlocked = true;
-        if (doorBlocker != null)
-        {
-            doorBlocker.enabled = false;  // Nonaktifkan blocker saat pintu terbuka
-        }
-        Debug.Log("Pintu terbuka!");
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("wizard") && !isUnlocked)
-        {
-            Debug.Log("Pintu terkunci. Selesaikan quiz!");
+            dialogueManager.StartDialogue();
+            dialogueManager.dialogueUI.SetActive(true);
         }
     }
 }

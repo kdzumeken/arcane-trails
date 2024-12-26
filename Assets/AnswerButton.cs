@@ -30,7 +30,7 @@ public class AnswerButton : MonoBehaviour
             }
             else
             {
-                Door_Prefab_Opened.GetComponent<DoorInteraction>().UnlockDoor();
+               // Door_Prefab_Opened.GetComponent<DoorInteraction>().UnlockDoor();
             }
         }
     }

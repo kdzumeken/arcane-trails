@@ -152,4 +152,19 @@ public class Wizard : MonoBehaviour
         }
         return false;
     }
+
+public void EnablePointerMode()
+{
+    Cursor.lockState = CursorLockMode.None;
+    Cursor.visible = true;
+    crosshair.gameObject.SetActive(false); // Hide the crosshair
+}
+
+public void DisablePointerMode()
+{
+    Cursor.lockState = CursorLockMode.Locked;
+    Cursor.visible = false;
+    crosshair.gameObject.SetActive(true); // Show the crosshair
+}
+
 }
