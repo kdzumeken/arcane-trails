@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Fire
   - Ground
+  - Item
+  - Cauldron
   layers:
   - Default
   - TransparentFX
