@@ -9337,11 +9337,12 @@ PrefabInstance:
         isn\u2019t all better. I\u2019m trying my best to clean your name but your
         parents aren\u2019t helping at all!\r\nSorry, I\u2019m just frustrated. I\u2019m
         really worried about you. I\u2019ll leave some notes here for that weird
-        noisy contraception.\r\n\r\nPlease be safe.\r\nLove, Erpa\r\n"
+        noisy contraception.\r\n\nC = red\r,\nD = green\r, \nE = blue\r, \nF = yellow\r,
+        \nG = purple\r, \nA = orange\r.\n\r\nPlease be safe.\r\nLove, Erpa\r\n"
       objectReference: {fileID: 0}
     - target: {fileID: 1996075007820526983, guid: c9728a2ee3cb8e445abe06f40b95a9f4, type: 3}
       propertyPath: m_margin.w
-      value: 270.69882
+      value: 39.061707
       objectReference: {fileID: 0}
     - target: {fileID: 1996075007820526983, guid: c9728a2ee3cb8e445abe06f40b95a9f4, type: 3}
       propertyPath: m_fontStyle
@@ -9357,7 +9358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3572028826081782279, guid: c9728a2ee3cb8e445abe06f40b95a9f4, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -124
+      value: -32
       objectReference: {fileID: 0}
     - target: {fileID: 4298111953201646970, guid: c9728a2ee3cb8e445abe06f40b95a9f4, type: 3}
       propertyPath: m_Name
