@@ -21844,6 +21844,11 @@ MonoBehaviour:
   - {fileID: 3698188372188179448}
   door: {fileID: 1633685141}
   debugText: {fileID: 0}
+  dialogueAudioClips:
+  - {fileID: 8300000, guid: b50783f691029a24c88e92fe216ff680, type: 3}
+  - {fileID: 8300000, guid: 43768aa55bf49ab469acfcb065c753ef, type: 3}
+  - {fileID: 8300000, guid: 89feaf290cd6af84fa642f7fd8a79009, type: 3}
+  - {fileID: 8300000, guid: b27d764cb41fd84459eecef12012f4c7, type: 3}
 --- !u!4 &1237953584
 Transform:
   m_ObjectHideFlags: 0

@@ -10,20 +10,30 @@ public class DialogueManager : MonoBehaviour
     public Text dialogueText;
     public Button[] optionButtons;
     public GameObject door;
-    public Text debugText; // UI element to display debug information
+    public Text debugText;
+
+    public AudioClip[] dialogueAudioClips; // Array of MP3s to play
+    private AudioSource audioSource; // AudioSource component to play the MP3s
 
     private int currentNodeIndex = 0;
-    private bool hasTriggeredFinalDialogue = false; // Flag to track if final dialogue has been triggered
+    private bool hasTriggeredFinalDialogue = false;
+    private int currentAudioIndex = 0; // To track the index of the MP3s
 
     void Start()
     {
         dialogueUI.SetActive(false);
-        ValidateDialogueTree(); // Check for errors in the dialogue tree
+        ValidateDialogueTree();
+
+        // Get or add an AudioSource component to play audio
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     public void StartDialogue()
     {
-        // Prevent starting dialogue if final dialogue has already been triggered
         if (hasTriggeredFinalDialogue)
         {
             Debug.Log("Final dialogue has already been triggered. Cannot start new dialogue.");
@@ -31,8 +41,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         wizard.EnablePointerMode();
-        currentNodeIndex = 0; // Reset to start
-        ShowDialogue(); // Start the dialogue immediately (no delay at start)
+        currentNodeIndex = 0;
+        ShowDialogue();
     }
 
     public void ShowDialogue()
@@ -50,6 +60,9 @@ public class DialogueManager : MonoBehaviour
         dialogueUI.SetActive(true);
         dialogueText.text = currentNode.dialogueText;
 
+        // Play the corresponding MP3
+        PlayAudioClip(currentAudioIndex);
+
         // Update debug information
         UpdateDebugPanel(currentNode);
 
@@ -62,10 +75,8 @@ public class DialogueManager : MonoBehaviour
 
                 // Assign OnClick listener dynamically
                 int nextIndex = currentNode.nextNodeIndexes[i];
-                optionButtons[i].onClick.RemoveAllListeners(); // Clear previous listeners
+                optionButtons[i].onClick.RemoveAllListeners();
                 optionButtons[i].onClick.AddListener(() => ChooseOption(nextIndex));
-                
-                Debug.Log($"Option {i}: {currentNode.options[i]} -> Leads to Node ID {nextIndex}");
             }
             else
             {
@@ -91,10 +102,8 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator WaitAndShowNextDialogue(int nextNodeIndex)
     {
-        // Wait for 0.5 seconds
         yield return new WaitForSeconds(0.5f);
 
-        // Move to the next node
         DialogueNode nextNode = dialogueTree.nodes[nextNodeIndex];
         if (nextNode.isFailure)
         {
@@ -106,13 +115,14 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.Log("Final dialogue reached. Opening door.");
             OpenDoor();
-            hasTriggeredFinalDialogue = true; // Mark final dialogue as triggered
+            hasTriggeredFinalDialogue = true;
             wizard.DisablePointerMode();
         }
         else
         {
             currentNodeIndex = nextNodeIndex;
-            ShowDialogue(); // Show the next dialogue after the delay
+            currentAudioIndex++; // Increment the audio index to play the next MP3
+            ShowDialogue();
         }
     }
 
@@ -126,7 +136,7 @@ public class DialogueManager : MonoBehaviour
     {
         Debug.Log("Opening door via animation trigger.");
         dialogueUI.SetActive(false);
-        door.GetComponent<Animator>().SetTrigger("Open"); // Requires an Animator on the door
+        door.GetComponent<Animator>().SetTrigger("Open");
     }
 
     private void ValidateDialogueTree()
@@ -161,7 +171,19 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // Method to access the flag from outside this class
+    // Method to play the audio clip at the current audio index
+    private void PlayAudioClip(int index)
+    {
+        if (index < 0 || index >= dialogueAudioClips.Length)
+        {
+            Debug.LogWarning("Audio index is out of range.");
+            return;
+        }
+
+        audioSource.clip = dialogueAudioClips[index];
+        audioSource.Play();
+    }
+
     public bool HasTriggeredFinalDialogue()
     {
         return hasTriggeredFinalDialogue;
