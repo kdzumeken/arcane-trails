@@ -118,9 +118,13 @@ public class Wizard : MonoBehaviour
                     Inventory inventory = FindObjectOfType<Inventory>();
                     if (inventory != null)
                     {
-                        inventory.AddItem(interactable.itemName);
-                        Destroy(interactable.gameObject); // Hapus objek setelah diambil
-                        Debug.Log($"Item '{interactable.itemName}' ditambahkan ke inventory.");
+                        // Tambahkan item ke inventory
+                        inventory.AddItem(interactable.itemName, interactable.itemObject, interactable.itemSprite, interactable.displayName);
+
+                        // Nonaktifkan objek setelah diambil
+                        interactable.gameObject.SetActive(false);
+
+                        Debug.Log($"Item '{interactable.displayName}' ditambahkan ke inventory.");
                     }
                 }
             }
@@ -130,6 +134,7 @@ public class Wizard : MonoBehaviour
             highlightedObject = null;
         }
     }
+
 
     void Jump()
     {
@@ -153,19 +158,19 @@ public class Wizard : MonoBehaviour
         return false;
     }
 
-public void EnablePointerMode()
-{
-    Cursor.lockState = CursorLockMode.None;
-    Cursor.visible = true;
-    crosshair.gameObject.SetActive(false); // Hide the crosshair
-}
+    public void EnablePointerMode()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        crosshair.gameObject.SetActive(false); // Hide the crosshair
+    }
 
-public void DisablePointerMode()
-{
-    Cursor.lockState = CursorLockMode.Locked;
-    Cursor.visible = false;
-    crosshair.gameObject.SetActive(true); // Show the crosshair
-}
+    public void DisablePointerMode()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        crosshair.gameObject.SetActive(true); // Show the crosshair
+    }
 
 
 }

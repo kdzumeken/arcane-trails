@@ -49,9 +49,8 @@ namespace SunTemple
             {
                 if (inventory.items.Contains(requiredItem))
                 {
-                    // Remove the item from the inventory
-                    inventory.items.Remove(requiredItem);
-                    Debug.Log(requiredItem + " has been used and removed from the inventory.");
+                    // Remove the item and its associated elements from the inventory
+                    RemoveItemAndAllRelated(inventory, requiredItem);
 
                     // Place the item in the scene
                     GameObject itemObject = new GameObject(requiredItem);
@@ -68,6 +67,27 @@ namespace SunTemple
             else
             {
                 Debug.Log("Inventory component not found on player.");
+            }
+        }
+
+        void RemoveItemAndAllRelated(Inventory inventory, string itemName)
+        {
+            int index = inventory.items.IndexOf(itemName);
+            if (index >= 0)
+            {
+                // Remove the item and its associated elements from all lists
+                inventory.items.RemoveAt(index);
+                inventory.itemObjects.RemoveAt(index);
+                inventory.itemSprites.RemoveAt(index);
+                inventory.displayNames.RemoveAt(index);
+
+                // Optionally, deactivate or destroy the associated GameObject if required
+                GameObject itemObject = inventory.itemObjects[index];
+                if (itemObject != null)
+                {
+                    itemObject.SetActive(true); // You can destroy it if needed: Destroy(itemObject);
+                }
+                Debug.Log(itemName + " has been completely removed from the inventory.");
             }
         }
     }
