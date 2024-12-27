@@ -118,7 +118,7 @@ namespace SunTemple
                 if (IsLocked == false)
                 {
                     Activate();
-                    inventory.items.Remove(requiredItem); // Remove the item from the inventory
+                    RemoveItemAndAllRelated(inventory, requiredItem); // Remove the item and its related elements from the inventory
                     Debug.Log(requiredItem + " has been used and removed from the inventory.");
                 }
             }
@@ -184,6 +184,27 @@ namespace SunTemple
             DoorClosed = true;
             CurrentLerpTime = 0;
             Moving = true;
+        }
+
+        void RemoveItemAndAllRelated(Inventory inventory, string itemName)
+        {
+            int index = inventory.items.IndexOf(itemName);
+            if (index >= 0)
+            {
+                // Remove the item and its associated elements from all lists
+                inventory.items.RemoveAt(index);
+                inventory.itemObjects.RemoveAt(index);
+                inventory.itemSprites.RemoveAt(index);
+                inventory.displayNames.RemoveAt(index);
+
+                // Optionally, deactivate or destroy the associated GameObject if required
+                GameObject itemObject = inventory.itemObjects[index];
+                if (itemObject != null)
+                {
+                    itemObject.SetActive(false); // You can destroy it if needed: Destroy(itemObject);
+                }
+                Debug.Log(itemName + " has been completely removed from the inventory.");
+            }
         }
     }
 }
