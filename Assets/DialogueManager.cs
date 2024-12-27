@@ -45,86 +45,86 @@ public class DialogueManager : MonoBehaviour
         ShowDialogue();
     }
 
-    public void ShowDialogue()
+public void ShowDialogue()
+{
+    if (currentNodeIndex < 0 || currentNodeIndex >= dialogueTree.nodes.Length)
     {
-        if (currentNodeIndex < 0 || currentNodeIndex >= dialogueTree.nodes.Length)
-        {
-            Debug.LogError($"Invalid currentNodeIndex: {currentNodeIndex}. Dialogue aborted.");
-            EndDialogue();
-            return;
-        }
-
-        DialogueNode currentNode = dialogueTree.nodes[currentNodeIndex];
-        Debug.Log($"Displaying Dialogue ID: {currentNodeIndex}, Text: {currentNode.dialogueText}");
-
-        dialogueUI.SetActive(true);
-        dialogueText.text = currentNode.dialogueText;
-
-        // Play the corresponding MP3
-        PlayAudioClip(currentAudioIndex);
-
-        // Update debug information
-        UpdateDebugPanel(currentNode);
-
-        for (int i = 0; i < optionButtons.Length; i++)
-        {
-            if (i < currentNode.options.Length)
-            {
-                optionButtons[i].gameObject.SetActive(true);
-                optionButtons[i].GetComponentInChildren<Text>().text = currentNode.options[i];
-
-                // Assign OnClick listener dynamically
-                int nextIndex = currentNode.nextNodeIndexes[i];
-                optionButtons[i].onClick.RemoveAllListeners();
-                optionButtons[i].onClick.AddListener(() => ChooseOption(nextIndex));
-            }
-            else
-            {
-                optionButtons[i].gameObject.SetActive(false);
-            }
-        }
+        Debug.LogError($"Invalid currentNodeIndex: {currentNodeIndex}. Dialogue aborted.");
+        EndDialogue();
+        return;
     }
 
-    public void ChooseOption(int nextNodeIndex)
+    DialogueNode currentNode = dialogueTree.nodes[currentNodeIndex];
+    Debug.Log($"Displaying Dialogue ID: {currentNodeIndex}, Text: {currentNode.dialogueText}");
+
+    dialogueUI.SetActive(true);
+    dialogueText.text = currentNode.dialogueText;
+
+    // Play the corresponding MP3 based on the node index
+    PlayAudioClipForNode(currentNodeIndex);
+
+    // Update debug information
+    UpdateDebugPanel(currentNode);
+
+    for (int i = 0; i < optionButtons.Length; i++)
     {
-        Debug.Log($"Selected Option -> Next Dialogue ID: {nextNodeIndex}");
-
-        if (nextNodeIndex < 0 || nextNodeIndex >= dialogueTree.nodes.Length)
+        if (i < currentNode.options.Length)
         {
-            Debug.LogError($"Invalid nextNodeIndex: {nextNodeIndex}. Check your dialogue tree.");
-            EndDialogue();
-            return;
-        }
+            optionButtons[i].gameObject.SetActive(true);
+            optionButtons[i].GetComponentInChildren<Text>().text = currentNode.options[i];
 
-        // Wait for 0.5 seconds before showing the next dialogue
-        StartCoroutine(WaitAndShowNextDialogue(nextNodeIndex));
-    }
-
-    private IEnumerator WaitAndShowNextDialogue(int nextNodeIndex)
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        DialogueNode nextNode = dialogueTree.nodes[nextNodeIndex];
-        if (nextNode.isFailure)
-        {
-            Debug.Log("Failure dialogue reached. Ending dialogue.");
-            EndDialogue();
-            wizard.DisablePointerMode();
-        }
-        else if (nextNode.isFinal)
-        {
-            Debug.Log("Final dialogue reached. Opening door.");
-            OpenDoor();
-            hasTriggeredFinalDialogue = true;
-            wizard.DisablePointerMode();
+            // Assign OnClick listener dynamically
+            int nextIndex = currentNode.nextNodeIndexes[i];
+            optionButtons[i].onClick.RemoveAllListeners();
+            optionButtons[i].onClick.AddListener(() => ChooseOption(nextIndex));
         }
         else
         {
-            currentNodeIndex = nextNodeIndex;
-            currentAudioIndex++; // Increment the audio index to play the next MP3
-            ShowDialogue();
+            optionButtons[i].gameObject.SetActive(false);
         }
     }
+}
+
+
+    public void ChooseOption(int nextNodeIndex)
+{
+    Debug.Log($"Selected Option -> Next Dialogue ID: {nextNodeIndex}");
+
+    if (nextNodeIndex < 0 || nextNodeIndex >= dialogueTree.nodes.Length)
+    {
+        Debug.LogError($"Invalid nextNodeIndex: {nextNodeIndex}. Check your dialogue tree.");
+        EndDialogue();
+        return;
+    }
+
+    // Wait for 0.5 seconds before showing the next dialogue
+    StartCoroutine(WaitAndShowNextDialogue(nextNodeIndex));
+}
+
+private IEnumerator WaitAndShowNextDialogue(int nextNodeIndex)
+{
+    yield return new WaitForSeconds(0.5f);
+
+    DialogueNode nextNode = dialogueTree.nodes[nextNodeIndex];
+    if (nextNode.isFailure)
+    {
+        Debug.Log("Failure dialogue reached. Ending dialogue.");
+        EndDialogue();
+        wizard.DisablePointerMode();
+    }
+    else if (nextNode.isFinal)
+    {
+        Debug.Log("Final dialogue reached. Opening door.");
+        OpenDoor();
+        hasTriggeredFinalDialogue = true;
+        wizard.DisablePointerMode();
+    }
+    else
+    {
+        currentNodeIndex = nextNodeIndex;
+        ShowDialogue();
+    }
+}
 
     public void EndDialogue()
     {
@@ -171,16 +171,15 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // Method to play the audio clip at the current audio index
-    private void PlayAudioClip(int index)
+    private void PlayAudioClipForNode(int nodeIndex)
     {
-        if (index < 0 || index >= dialogueAudioClips.Length)
+        if (nodeIndex < 0 || nodeIndex >= dialogueAudioClips.Length)
         {
-            Debug.LogWarning("Audio index is out of range.");
+            Debug.LogWarning("Audio index is out of range or not mapped for this node.");
             return;
         }
 
-        audioSource.clip = dialogueAudioClips[index];
+        audioSource.clip = dialogueAudioClips[nodeIndex];
         audioSource.Play();
     }
 
@@ -188,4 +187,6 @@ public class DialogueManager : MonoBehaviour
     {
         return hasTriggeredFinalDialogue;
     }
+
+    
 }

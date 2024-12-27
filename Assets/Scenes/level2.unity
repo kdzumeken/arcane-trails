@@ -21845,9 +21845,14 @@ MonoBehaviour:
   door: {fileID: 1633685141}
   debugText: {fileID: 0}
   dialogueAudioClips:
-  - {fileID: 8300000, guid: b50783f691029a24c88e92fe216ff680, type: 3}
-  - {fileID: 8300000, guid: 43768aa55bf49ab469acfcb065c753ef, type: 3}
-  - {fileID: 8300000, guid: 89feaf290cd6af84fa642f7fd8a79009, type: 3}
+  - {fileID: 8300000, guid: 83d4185e17ad9684f92990edcbe4ac8a, type: 3}
+  - {fileID: 8300000, guid: d82ae6664a904de4b80f5f95302fdf63, type: 3}
+  - {fileID: 8300000, guid: 8566fa97c110d914491ec5edb603dbda, type: 3}
+  - {fileID: 8300000, guid: b489bae494f90a24bbf7c7f74ef84113, type: 3}
+  - {fileID: 8300000, guid: 2c86ac505a05bf444bf8f48cc0425449, type: 3}
+  - {fileID: 8300000, guid: ad46a4d28ddeea14983253229ddf8033, type: 3}
+  - {fileID: 8300000, guid: 2813afcf7421a2542a2d42eaf3ef6b0e, type: 3}
+  - {fileID: 8300000, guid: b27d764cb41fd84459eecef12012f4c7, type: 3}
   - {fileID: 8300000, guid: b27d764cb41fd84459eecef12012f4c7, type: 3}
 --- !u!4 &1237953584
 Transform:
