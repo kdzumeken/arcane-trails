@@ -72,22 +72,38 @@ namespace SunTemple
 
         void RemoveItemAndAllRelated(Inventory inventory, string itemName)
         {
+            // Find the index of the item to remove
             int index = inventory.items.IndexOf(itemName);
+
+            // Ensure the item exists in the list
             if (index >= 0)
             {
-                // Remove the item and its associated elements from all lists
-                inventory.items.RemoveAt(index);
+                // First, remove the associated item data from other lists
+                if (index < inventory.itemObjects.Count)
+                {
+                    // Deactivate or destroy the associated GameObject if needed
+                    GameObject itemObject = inventory.itemObjects[index];
+                    if (itemObject != null)
+                    {
+                        itemObject.SetActive(false); // Optionally destroy it: Destroy(itemObject);
+                    }
+                }
+
+                // Now, remove the item and its related elements from the lists
                 inventory.itemObjects.RemoveAt(index);
                 inventory.itemSprites.RemoveAt(index);
                 inventory.displayNames.RemoveAt(index);
 
-                // Optionally, deactivate or destroy the associated GameObject if required
-                GameObject itemObject = inventory.itemObjects[index];
-                if (itemObject != null)
-                {
-                    itemObject.SetActive(true); // You can destroy it if needed: Destroy(itemObject);
-                }
+                // Finally, remove the item from the inventory
+                inventory.items.RemoveAt(index);
+
+                // Debugging message
                 Debug.Log(itemName + " has been completely removed from the inventory.");
+            }
+            else
+            {
+                // If the item wasn't found
+                Debug.LogWarning(itemName + " not found in inventory.");
             }
         }
     }

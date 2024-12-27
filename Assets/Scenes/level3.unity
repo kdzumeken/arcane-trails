@@ -3112,6 +3112,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: bola2
+  itemObject: {fileID: 394189813}
+  itemSprite: {fileID: 21300000, guid: ba99fa6d861c2ea44b66ecfa54bd2800, type: 3}
+  displayName: Sphere of Earth
+  hoverText: {fileID: 0}
 --- !u!1001 &411496892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3935,6 +3939,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
+  itemObjects: []
+  itemSprites: []
+  displayNames: []
+  inventoryUI: {fileID: 0}
+  itemSlotPrefab: {fileID: 0}
+  itemsParent: {fileID: 0}
 --- !u!1001 &606345596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6061,6 +6071,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 397993045648193017, guid: a25b3723a425af04985bf9cb2f0d3334, type: 3}
       insertIndex: -1
       addedObject: {fileID: 932356185}
+    - targetCorrespondingSourceObject: {fileID: 397993045648193017, guid: a25b3723a425af04985bf9cb2f0d3334, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 932356186}
   m_SourcePrefab: {fileID: 100100000, guid: a25b3723a425af04985bf9cb2f0d3334, type: 3}
 --- !u!1 &932356184 stripped
 GameObject:
@@ -6080,6 +6093,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: bola1
+  itemObject: {fileID: 932356184}
+  itemSprite: {fileID: 21300000, guid: e8d6a12cca017ad4f81bb833d7c8f4d4, type: 3}
+  displayName: Sphere of Water
+  hoverText: {fileID: 0}
+--- !u!114 &932356186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932356184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &933108036
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11089,6 +11124,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: bola3
+  itemObject: {fileID: 1587577534}
+  itemSprite: {fileID: 21300000, guid: 8011963bbc1b4ac42adae7886ba99d8a, type: 3}
+  displayName: Sphere of Fire
+  hoverText: {fileID: 0}
 --- !u!1001 &1601991387
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13071,6 +13110,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: key2
+  itemObject: {fileID: 0}
+  itemSprite: {fileID: 0}
+  displayName: 
+  hoverText: {fileID: 0}
 --- !u!1001 &1848361089
 PrefabInstance:
   m_ObjectHideFlags: 0

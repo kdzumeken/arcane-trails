@@ -6032,6 +6032,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2801341302373484133, guid: cafb3b4966c8c144ebc1342e811a77e0, type: 3}
   m_PrefabInstance: {fileID: 332304079}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &335685392 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4530468948701185676, guid: 07dd0ed6acb5c5140a213008cf7b2a1d, type: 3}
+  m_PrefabInstance: {fileID: 856092348}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &335693033
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6463,9 +6468,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Key1
-  itemObject: {fileID: 0}
-  itemSprite: {fileID: 0}
-  displayName: 
+  itemObject: {fileID: 1938552937}
+  itemSprite: {fileID: 21300000, guid: 73108bc32618d9d4ca04498cc937e3bc, type: 3}
+  displayName: Middle Key
   hoverText: {fileID: 0}
 --- !u!4 &373814679 stripped
 Transform:
@@ -10117,6 +10122,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8460917321318470221, guid: 3964c23ae9838e84889ea6d65b5861aa, type: 3}
   m_PrefabInstance: {fileID: 526720686}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &533576062 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4530468948701185676, guid: 07dd0ed6acb5c5140a213008cf7b2a1d, type: 3}
+  m_PrefabInstance: {fileID: 2073857766}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &533882797
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11118,8 +11128,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Key
-  itemObject: {fileID: 0}
-  itemSprite: {fileID: 0}
+  itemObject: {fileID: 1160748502}
+  itemSprite: {fileID: 21300000, guid: 73108bc32618d9d4ca04498cc937e3bc, type: 3}
   displayName: Key
   hoverText: {fileID: 326237598}
 --- !u!114 &589437611
@@ -15004,9 +15014,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: KeyDoor
-  itemObject: {fileID: 0}
-  itemSprite: {fileID: 0}
-  displayName: Key
+  itemObject: {fileID: 533576062}
+  itemSprite: {fileID: 21300000, guid: 73108bc32618d9d4ca04498cc937e3bc, type: 3}
+  displayName: Door Key
   hoverText: {fileID: 326237598}
 --- !u!114 &799163228
 MonoBehaviour:
@@ -19178,9 +19188,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: KeyLast
-  itemObject: {fileID: 0}
-  itemSprite: {fileID: 0}
-  displayName: Key
+  itemObject: {fileID: 335685392}
+  itemSprite: {fileID: 21300000, guid: 73108bc32618d9d4ca04498cc937e3bc, type: 3}
+  displayName: Exit Key
   hoverText: {fileID: 326237598}
 --- !u!65 &985265003
 BoxCollider:
@@ -21719,8 +21729,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: RedApple
-  itemObject: {fileID: 0}
-  itemSprite: {fileID: 0}
+  itemObject: {fileID: 1137229494}
+  itemSprite: {fileID: 21300000, guid: 579f9ed7f46385a4db780d92c42c1510, type: 3}
   displayName: Red Apple
   hoverText: {fileID: 326237598}
 --- !u!114 &1137229498
@@ -22165,6 +22175,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3378643206010823238, guid: ccbfdc64594325c4ebfb2ccd9a074f8b, type: 3}
   m_PrefabInstance: {fileID: 1151874398}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1160748502 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4530468948701185676, guid: 07dd0ed6acb5c5140a213008cf7b2a1d, type: 3}
+  m_PrefabInstance: {fileID: 914573193}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1162846768
 PrefabInstance:
@@ -25421,7 +25436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: GreenApple
   itemObject: {fileID: 1295415029}
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: d7293311d8686f948b028567e572e241, type: 3}
   displayName: Red Apple
   hoverText: {fileID: 326237598}
 --- !u!135 &1295415034
@@ -30049,8 +30064,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Statue
-  itemObject: {fileID: 0}
-  itemSprite: {fileID: 0}
+  itemObject: {fileID: 1512428177}
+  itemSprite: {fileID: 21300000, guid: afacaa2d7e7797e419189d20a1057eef, type: 3}
   displayName: Boulder
   hoverText: {fileID: 326237598}
 --- !u!114 &1512428182
@@ -32980,6 +32995,10 @@ PrefabInstance:
     - target: {fileID: 2524475484483941508, guid: 10aee71672b465f48bafe61236e54e51, type: 3}
       propertyPath: m_Name
       value: InventoryCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3691633207039267296, guid: 10aee71672b465f48bafe61236e54e51, type: 3}
+      propertyPath: m_ChildAlignment
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4013929747635518301, guid: 10aee71672b465f48bafe61236e54e51, type: 3}
       propertyPath: m_Pivot.x
@@ -36303,8 +36322,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Book
-  itemObject: {fileID: 0}
-  itemSprite: {fileID: 0}
+  itemObject: {fileID: 561037334}
+  itemSprite: {fileID: 21300000, guid: e9f3be4999fb97a48b8ccb668ff4117c, type: 3}
   displayName: Strange Book
   hoverText: {fileID: 326237598}
 --- !u!65 &1827771218
@@ -38157,6 +38176,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2801341302373484133, guid: cafb3b4966c8c144ebc1342e811a77e0, type: 3}
   m_PrefabInstance: {fileID: 1935870346}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1938552937 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4530468948701185676, guid: 07dd0ed6acb5c5140a213008cf7b2a1d, type: 3}
+  m_PrefabInstance: {fileID: 161386421}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1942448691
 PrefabInstance:
