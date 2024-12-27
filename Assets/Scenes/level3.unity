@@ -6847,6 +6847,25 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: b7bca2c39ab441441a3eb8bf4f6e6bdc, type: 3}
+--- !u!114 &1003525450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003525438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e15249227470574eb1248c5344c4780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsLocked: 1
+  DoorClosed: 1
+  OpenRotationAmount: 90
+  RotationSpeed: 1
+  MaxDistance: 3
+  playerTag: Player
+  requiredItem: Key
 --- !u!1001 &1005027915
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13126,6 +13145,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5715352503086175461, guid: 3b2cb4f0faf28de45be5512773ab7773, type: 3}
+      propertyPath: itemObject
+      value: 
+      objectReference: {fileID: 1836241587}
+    - target: {fileID: 5715352503086175461, guid: 3b2cb4f0faf28de45be5512773ab7773, type: 3}
+      propertyPath: itemSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 73108bc32618d9d4ca04498cc937e3bc, type: 3}
+    - target: {fileID: 5715352503086175461, guid: 3b2cb4f0faf28de45be5512773ab7773, type: 3}
+      propertyPath: displayName
+      value: Church Key
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14651,6 +14682,9 @@ PrefabInstance:
     - {fileID: 1790631494964142, guid: 537f714a0a7039549960966aef600efb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1372814800615594, guid: 537f714a0a7039549960966aef600efb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1003525450}
     - targetCorrespondingSourceObject: {fileID: 1372814800615594, guid: 537f714a0a7039549960966aef600efb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1003525444}
