@@ -10551,7 +10551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 1732842883}
-  onColor: {r: 0, g: 0.08403206, b: 1, a: 0}
+  onColor: {r: 0.62344885, g: 0, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1756784995}
 --- !u!65 &555361345
@@ -20892,7 +20892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lampLight: {fileID: 346475096}
-  onColor: {r: 0.13414192, g: 1, b: 0, a: 0}
+  onColor: {r: 1, g: 1, b: 1, a: 0}
   offColor: {r: 0, g: 0, b: 0, a: 1}
   puzzleManager: {fileID: 1756784995}
 --- !u!65 &1081533920
@@ -34815,7 +34815,7 @@ MonoBehaviour:
   - {fileID: 1081533919}
   - {fileID: 555361344}
   chest: {fileID: 2091641516}
-  correctSequence: 03000000020000000100000000000000
+  correctSequence: 01000000030000000200000000000000
   lampPressSound: {fileID: 8300000, guid: 7905420debc5acc4994d890c8e64d07d, type: 3}
   wrongSequenceSound: {fileID: 8300000, guid: dc845450c62e8bc4480f01a7748c3d6e, type: 3}
   puzzleSolvedSound: {fileID: 8300000, guid: b27d764cb41fd84459eecef12012f4c7, type: 3}
