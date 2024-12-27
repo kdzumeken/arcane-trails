@@ -3093,6 +3093,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7680529403145111814, guid: 853665bfc6ac8324784ed3fc27bb7f73, type: 3}
       insertIndex: -1
       addedObject: {fileID: 394189814}
+    - targetCorrespondingSourceObject: {fileID: 7680529403145111814, guid: 853665bfc6ac8324784ed3fc27bb7f73, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 394189816}
   m_SourcePrefab: {fileID: 100100000, guid: 853665bfc6ac8324784ed3fc27bb7f73, type: 3}
 --- !u!1 &394189813 stripped
 GameObject:
@@ -3116,6 +3119,24 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: ba99fa6d861c2ea44b66ecfa54bd2800, type: 3}
   displayName: Sphere of Earth
   hoverText: {fileID: 0}
+--- !u!114 &394189816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394189813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &411496892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11105,6 +11126,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 809034063130156681, guid: befff11214a7b104cace0b47fa934c5f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1587577535}
+    - targetCorrespondingSourceObject: {fileID: 809034063130156681, guid: befff11214a7b104cace0b47fa934c5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1587577537}
   m_SourcePrefab: {fileID: 100100000, guid: befff11214a7b104cace0b47fa934c5f, type: 3}
 --- !u!1 &1587577534 stripped
 GameObject:
@@ -11128,6 +11152,24 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 8011963bbc1b4ac42adae7886ba99d8a, type: 3}
   displayName: Sphere of Fire
   hoverText: {fileID: 0}
+--- !u!114 &1587577537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587577534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &1601991387
 PrefabInstance:
   m_ObjectHideFlags: 0
