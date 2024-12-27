@@ -1,73 +1,78 @@
 using UnityEngine;
+using TMPro;
 
 public class InteractableObject : MonoBehaviour
 {
     public string itemName; // Nama item
-    public Material outlineMaterial; // Material with outline shader
-    private Material originalMaterial; // Original material of the object
-    private Renderer objectRenderer; // Renderer of the object
-    private Material[] originalMaterials; // Original materials for multi-material objects
+    public GameObject itemObject; // Objek 3D item
+    public Sprite itemSprite; // Sprite item
+    public string displayName; // Nama yang ditampilkan di UI
+    public TextMeshProUGUI hoverText; // Referensi ke TMP Text untuk menampilkan nama item
+    private Outline outline; // Referensi ke komponen Outline
 
     private void Start()
     {
-        objectRenderer = GetComponent<Renderer>();
-        if (objectRenderer != null)
+        // Mendapatkan referensi Outline
+        outline = GetComponent<Outline>();
+        if (outline != null)
         {
-            // Jika objek menggunakan beberapa material, kita simpan semua material-nya
-            if (objectRenderer.materials.Length > 1)
-            {
-                originalMaterials = objectRenderer.materials;
-            }
-            else
-            {
-                originalMaterial = objectRenderer.material;
-            }
+            outline.enabled = false; // Nonaktifkan outline secara default
+        }
+
+        // Nonaktifkan hoverText secara default
+        if (hoverText != null)
+        {
+            hoverText.gameObject.SetActive(false);
         }
     }
 
     private void OnMouseEnter()
     {
-        if (objectRenderer != null && outlineMaterial != null)
+        // Aktifkan outline saat hover jika komponen Outline ada
+        if (outline != null)
         {
-            // Ganti material objek dengan outline material saat hover
-            if (objectRenderer.materials.Length > 1)
-            {
-                // Jika objek memiliki beberapa material, ganti hanya material pertama
-                Material[] materials = objectRenderer.materials;
-                materials[0] = outlineMaterial;
-                objectRenderer.materials = materials;
-            }
-            else
-            {
-                objectRenderer.material = outlineMaterial;
-            }
+            outline.enabled = true;
+        }
+
+        // Tampilkan UI teks saat hover
+        if (hoverText != null)
+        {
+            hoverText.text = "Take " + displayName;
+            hoverText.gameObject.SetActive(true);
         }
     }
 
     private void OnMouseExit()
     {
-        if (objectRenderer != null)
+        // Nonaktifkan outline saat kursor keluar dari objek
+        if (outline != null)
         {
-            // Kembalikan material asli saat mouse keluar
-            if (objectRenderer.materials.Length > 1)
-            {
-                objectRenderer.materials = originalMaterials;
-            }
-            else
-            {
-                objectRenderer.material = originalMaterial;
-            }
+            outline.enabled = false;
+        }
+
+        // Sembunyikan UI teks saat kursor keluar dari objek
+        if (hoverText != null)
+        {
+            hoverText.gameObject.SetActive(false);
         }
     }
 
     private void OnMouseDown()
     {
+        // Mendapatkan referensi ke inventory
         Inventory inventory = FindObjectOfType<Inventory>();
         if (inventory != null)
         {
-            inventory.AddItem(itemName);
+            // Menambahkan item ke inventory dan mengupdate UI
+            inventory.AddItem(itemName, itemObject, itemSprite, displayName); // Tambahkan displayName
             Destroy(gameObject); // Hapus objek setelah diambil
-            Debug.Log($"Item '{itemName}' ditambahkan ke inventory dengan klik.");
+            Debug.Log($"Item '{itemName}' dengan nama tampilan '{displayName}' ditambahkan ke inventory.");
+        }
+
+        // Sembunyikan UI teks setelah item diambil
+        if (hoverText != null)
+        {
+            hoverText.gameObject.SetActive(false);
         }
     }
 }
