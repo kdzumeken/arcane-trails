@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class DialogueManager : MonoBehaviour
     public Text debugText; // UI element to display debug information
 
     private int currentNodeIndex = 0;
+    private bool hasTriggeredFinalDialogue = false; // Flag to track if final dialogue has been triggered
 
     void Start()
     {
@@ -21,9 +23,16 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue()
     {
+        // Prevent starting dialogue if final dialogue has already been triggered
+        if (hasTriggeredFinalDialogue)
+        {
+            Debug.Log("Final dialogue has already been triggered. Cannot start new dialogue.");
+            return;
+        }
+
         wizard.EnablePointerMode();
         currentNodeIndex = 0; // Reset to start
-        ShowDialogue();
+        ShowDialogue(); // Start the dialogue immediately (no delay at start)
     }
 
     public void ShowDialogue()
@@ -37,7 +46,7 @@ public class DialogueManager : MonoBehaviour
 
         DialogueNode currentNode = dialogueTree.nodes[currentNodeIndex];
         Debug.Log($"Displaying Dialogue ID: {currentNodeIndex}, Text: {currentNode.dialogueText}");
-        
+
         dialogueUI.SetActive(true);
         dialogueText.text = currentNode.dialogueText;
 
@@ -76,6 +85,16 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        // Wait for 0.5 seconds before showing the next dialogue
+        StartCoroutine(WaitAndShowNextDialogue(nextNodeIndex));
+    }
+
+    private IEnumerator WaitAndShowNextDialogue(int nextNodeIndex)
+    {
+        // Wait for 0.5 seconds
+        yield return new WaitForSeconds(0.5f);
+
+        // Move to the next node
         DialogueNode nextNode = dialogueTree.nodes[nextNodeIndex];
         if (nextNode.isFailure)
         {
@@ -87,12 +106,13 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.Log("Final dialogue reached. Opening door.");
             OpenDoor();
+            hasTriggeredFinalDialogue = true; // Mark final dialogue as triggered
             wizard.DisablePointerMode();
         }
         else
         {
             currentNodeIndex = nextNodeIndex;
-            ShowDialogue();
+            ShowDialogue(); // Show the next dialogue after the delay
         }
     }
 
@@ -139,5 +159,11 @@ public class DialogueManager : MonoBehaviour
                 debugText.text += $"- {currentNode.options[i]} (Leads to Node ID: {currentNode.nextNodeIndexes[i]})\n";
             }
         }
+    }
+
+    // Method to access the flag from outside this class
+    public bool HasTriggeredFinalDialogue()
+    {
+        return hasTriggeredFinalDialogue;
     }
 }
