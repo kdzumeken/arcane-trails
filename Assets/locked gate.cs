@@ -118,14 +118,36 @@ namespace SunTemple
                 if (IsLocked == false)
                 {
                     Activate();
-                    // Remove the used item from the inventory
-                    inventory.items.Remove(requiredItem);
+                    // Remove the used item and all other items from the inventory
+                    RemoveItemAndAllRelated(inventory, requiredItem);
                     Debug.Log(requiredItem + " has been used and removed from the inventory.");
                 }
             }
             else
             {
                 Debug.Log("You need a " + requiredItem + " to open this gate.");
+            }
+        }
+
+        // Function to remove the specified item and all related data from the inventory
+        void RemoveItemAndAllRelated(Inventory inventory, string itemName)
+        {
+            int index = inventory.items.IndexOf(itemName);
+            if (index >= 0)
+            {
+                // Remove the item and its associated elements from all lists
+                inventory.items.RemoveAt(index);
+                inventory.itemObjects.RemoveAt(index);
+                inventory.itemSprites.RemoveAt(index);
+                inventory.displayNames.RemoveAt(index);
+
+                // Optionally, deactivate or destroy the associated GameObject if required
+                GameObject itemObject = inventory.itemObjects[index];
+                if (itemObject != null)
+                {
+                    itemObject.SetActive(true); // You can destroy it if needed: Destroy(itemObject);
+                }
+                Debug.Log(itemName + " has been completely removed from the inventory.");
             }
         }
 

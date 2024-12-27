@@ -4,6 +4,8 @@ using TMPro;
 public class InteractableObject : MonoBehaviour
 {
     public string itemName; // Nama item
+    public GameObject itemObject; // Objek 3D item
+    public Sprite itemSprite; // Sprite item
     public string displayName; // Nama yang ditampilkan di UI
     public TextMeshProUGUI hoverText; // Referensi ke TMP Text untuk menampilkan nama item
     private Outline outline; // Referensi ke komponen Outline
@@ -57,12 +59,14 @@ public class InteractableObject : MonoBehaviour
 
     private void OnMouseDown()
     {
+        // Mendapatkan referensi ke inventory
         Inventory inventory = FindObjectOfType<Inventory>();
         if (inventory != null)
         {
-            inventory.AddItem(itemName);
+            // Menambahkan item ke inventory dan mengupdate UI
+            inventory.AddItem(itemName, itemObject, itemSprite, displayName); // Tambahkan displayName
             Destroy(gameObject); // Hapus objek setelah diambil
-            Debug.Log($"Item '{itemName}' ditambahkan ke inventory dengan klik.");
+            Debug.Log($"Item '{itemName}' dengan nama tampilan '{displayName}' ditambahkan ke inventory.");
         }
 
         // Sembunyikan UI teks setelah item diambil
@@ -72,4 +76,3 @@ public class InteractableObject : MonoBehaviour
         }
     }
 }
-

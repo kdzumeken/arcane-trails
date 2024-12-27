@@ -118,9 +118,13 @@ public class Wizard : MonoBehaviour
                     Inventory inventory = FindObjectOfType<Inventory>();
                     if (inventory != null)
                     {
-                        inventory.AddItem(interactable.itemName);
-                        Destroy(interactable.gameObject); // Hapus objek setelah diambil
-                        Debug.Log($"Item '{interactable.itemName}' ditambahkan ke inventory.");
+                        // Tambahkan item ke inventory
+                        inventory.AddItem(interactable.itemName, interactable.itemObject, interactable.itemSprite, interactable.displayName);
+
+                        // Nonaktifkan objek setelah diambil
+                        interactable.gameObject.SetActive(false);
+
+                        Debug.Log($"Item '{interactable.displayName}' ditambahkan ke inventory.");
                     }
                 }
             }
@@ -130,6 +134,7 @@ public class Wizard : MonoBehaviour
             highlightedObject = null;
         }
     }
+
 
     void Jump()
     {
