@@ -3,8 +3,17 @@ using UnityEngine;
 public class DoorInteraction : MonoBehaviour
 {
     public DialogueManager dialogueManager;
-
     public GameObject door;
+    public Outline outline; // Reference to the Outline component
+
+    void Start()
+    {
+        // Ensure the outline is initially disabled
+        if (outline != null)
+        {
+            outline.enabled = false;
+        }
+    }
 
     void OnMouseDown()
     {
@@ -20,6 +29,24 @@ public class DoorInteraction : MonoBehaviour
             {
                 Debug.Log("Final dialogue has already been triggered, door interaction blocked.");
             }
+        }
+    }
+
+    void OnMouseEnter()
+    {
+        // Enable the outline when the mouse enters the object
+        if (outline != null)
+        {
+            outline.enabled = true;
+        }
+    }
+
+    void OnMouseExit()
+    {
+        // Disable the outline when the mouse exits the object
+        if (outline != null)
+        {
+            outline.enabled = false;
         }
     }
 
