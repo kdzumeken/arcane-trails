@@ -2,141 +2,211 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gate : MonoBehaviour
+namespace SunTemple
 {
-    public bool IsLocked = false;
-    public bool GateClosed = true;
-    public float OpenRotationAmount = 90f; // Sudut rotasi untuk membuka daun pagar
-    public float RotationSpeed = 1f;
-    public float MaxDistance = 5.0f;
-    public string playerTag = "Player";
-
-    public Transform LeftGate;  // Referensi ke Pintu Kiri
-    public Transform RightGate; // Referensi ke Pintu Kanan
-
-    private BoxCollider LeftGateCollider;
-    private BoxCollider RightGateCollider;
-
-    private GameObject Player;
-    private Camera Cam;
-    private bool Rotating = false;
-
-    private float CurrentLerpTime = 0f;
-    private float LerpTime = 1f;
-
-    private float LeftGateStartAngle;
-    private float RightGateStartAngle;
-
-    private float LeftGateEndAngle;
-    private float RightGateEndAngle;
-
-    void Start()
+    public class Gate : MonoBehaviour
     {
-        Player = GameObject.FindGameObjectWithTag(playerTag);
+        public bool IsLocked = false;
+        public bool DoorClosed = true;
+        public float OpenRotationAmount = 90.0f; // Amount to rotate the gate
+        public float MoveSpeed = 1f;
+        public string playerTag = "Player";
+        public string requiredItem = "Key"; // Item required to unlock the gate
+        public List<GameObject> gates; // List of gate objects
 
-        if (!Player)
+        private GameObject Player;
+        private Camera Cam;
+        private CursorManager cursor;
+
+        Quaternion[] StartRotations;
+        Quaternion[] EndRotations;
+        float LerpTime = 1f;
+        float CurrentLerpTime = 0;
+        bool Moving;
+
+        private bool scriptIsEnabled = true;
+        private bool playerInRange = false;
+
+        void Start()
         {
-            Debug.LogWarning(this.GetType().Name + ".cs on " + this.name + ", No object tagged with " + playerTag + " found in Scene", gameObject);
-            return;
-        }
-
-        Cam = Camera.main;
-
-        LeftGateStartAngle = LeftGate.localEulerAngles.y;
-        RightGateStartAngle = RightGate.localEulerAngles.y;
-
-        LeftGateCollider = LeftGate.GetComponent<BoxCollider>();
-        RightGateCollider = RightGate.GetComponent<BoxCollider>();
-    }
-
-    void Update()
-    {
-        if (Rotating)
-        {
-            RotateGates(); // Buka kedua pintu secara bersamaan
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            TryToOpen();
-        }
-    }
-
-    void TryToOpen()
-    {
-        Vector3 playerPosition = Player.transform.position;
-
-        // Get the closest points on the colliders to the player
-        Vector3 closestPointLeftGate = LeftGateCollider.ClosestPoint(playerPosition);
-        Vector3 closestPointRightGate = RightGateCollider.ClosestPoint(playerPosition);
-
-        // Calculate the distances from the player to the closest points
-        float distanceToLeftGate = Vector3.Distance(playerPosition, closestPointLeftGate);
-        float distanceToRightGate = Vector3.Distance(playerPosition, closestPointRightGate);
-
-        // Check if the player is within the max distance of either gate
-        if (distanceToLeftGate <= MaxDistance || distanceToRightGate <= MaxDistance)
-        {
-            if (!IsLocked)
+            if (gates == null || gates.Count == 0)
             {
-                Activate();
+                Debug.LogWarning(this.GetType().Name + ".cs on " + gameObject.name + " has no gates assigned", gameObject);
+                scriptIsEnabled = false;
+                return;
+            }
+
+            StartRotations = new Quaternion[gates.Count];
+            EndRotations = new Quaternion[gates.Count];
+
+            for (int i = 0; i < gates.Count; i++)
+            {
+                StartRotations[i] = gates[i].transform.localRotation;
+                EndRotations[i] = StartRotations[i] * Quaternion.Euler(0, OpenRotationAmount, 0);
+            }
+
+            Player = GameObject.FindGameObjectWithTag(playerTag);
+
+            if (!Player)
+            {
+                Debug.LogWarning(this.GetType().Name + ".cs on " + this.name + ", No object tagged with " + playerTag + " found in Scene", gameObject);
+                scriptIsEnabled = false;
+                return;
+            }
+
+            Cam = Camera.main;
+            if (!Cam)
+            {
+                Debug.LogWarning(this.GetType().Name + ", No objects tagged with MainCamera in Scene", gameObject);
+                scriptIsEnabled = false;
+            }
+
+            cursor = CursorManager.instance;
+
+            if (cursor != null)
+            {
+                cursor.SetCursorToDefault();
             }
         }
-    }
 
-    public void Activate()
-    {
-        if (GateClosed)
-            OpenGates();
-        else
-            CloseGates();
-    }
-
-    void RotateGates()
-    {
-        CurrentLerpTime += Time.deltaTime * RotationSpeed;
-
-        if (CurrentLerpTime > LerpTime)
+        void Update()
         {
-            CurrentLerpTime = LerpTime;
+            if (scriptIsEnabled)
+            {
+                if (Moving)
+                {
+                    Move();
+                }
+
+                if (playerInRange && Input.GetKeyDown(KeyCode.E))
+                {
+                    TryToOpen();
+                }
+
+                if (cursor != null)
+                {
+                    CursorHint();
+                }
+            }
         }
 
-        float _Perc = CurrentLerpTime / LerpTime;
-
-        // Menggunakan Lerp untuk menginterpolasi rotasi dari posisi awal ke posisi akhir secara smooth
-        float leftGateAngle = Mathf.Lerp(LeftGateStartAngle, LeftGateEndAngle, _Perc);
-        float rightGateAngle = Mathf.Lerp(RightGateStartAngle, RightGateEndAngle, _Perc);
-
-        LeftGate.localEulerAngles = new Vector3(LeftGate.localEulerAngles.x, leftGateAngle, LeftGate.localEulerAngles.z);
-        RightGate.localEulerAngles = new Vector3(RightGate.localEulerAngles.x, rightGateAngle, RightGate.localEulerAngles.z);
-
-        if (CurrentLerpTime == LerpTime)
+        void OnTriggerEnter(Collider other)
         {
-            Rotating = false;
+            if (other.CompareTag(playerTag))
+            {
+                playerInRange = true;
+            }
         }
-    }
 
-    void OpenGates()
-    {
-        GateClosed = false;
-        CurrentLerpTime = 0;
+        void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag(playerTag))
+            {
+                playerInRange = false;
+                if (cursor != null)
+                {
+                    cursor.SetCursorToDefault();
+                }
+            }
+        }
 
-        // Tentukan rotasi akhir untuk kedua daun pintu agar terbuka bersamaan
-        LeftGateEndAngle = LeftGateStartAngle + OpenRotationAmount;  // Pintu kiri membuka ke kanan
-        RightGateEndAngle = RightGateStartAngle - OpenRotationAmount; // Pintu kanan membuka ke kiri
+        void TryToOpen()
+        {
+            Inventory inventory = Player.GetComponent<Inventory>();
+            if (inventory != null && inventory.items.Contains(requiredItem))
+            {
+                if (IsLocked == false)
+                {
+                    Activate();
+                    // Remove the used item and all other items from the inventory
+                    RemoveItemAndAllRelated(inventory, requiredItem);
+                    Debug.Log(requiredItem + " has been used and removed from the inventory.");
+                }
+            }
+            else
+            {
+                Debug.Log("You need a " + requiredItem + " to open this gate.");
+            }
+        }
 
-        Rotating = true;
-    }
+        // Function to remove the specified item and all related data from the inventory
+        void RemoveItemAndAllRelated(Inventory inventory, string itemName)
+        {
+            int index = inventory.items.IndexOf(itemName);
+            if (index >= 0)
+            {
+                // Remove the item and its associated elements from all lists
+                inventory.items.RemoveAt(index);
+                inventory.itemObjects.RemoveAt(index);
+                inventory.itemSprites.RemoveAt(index);
+                inventory.displayNames.RemoveAt(index);
 
-    void CloseGates()
-    {
-        GateClosed = true;
-        CurrentLerpTime = 0;
+                // Optionally, deactivate or destroy the associated GameObject if required
+                GameObject itemObject = inventory.itemObjects[index];
+                if (itemObject != null)
+                {
+                    itemObject.SetActive(true); // You can destroy it if needed: Destroy(itemObject);
+                }
+                Debug.Log(itemName + " has been completely removed from the inventory.");
+            }
+        }
 
-        // Kembali ke rotasi awal saat menutup
-        LeftGateEndAngle = LeftGateStartAngle;
-        RightGateEndAngle = RightGateStartAngle;
+        void CursorHint()
+        {
+            if (playerInRange)
+            {
+                if (IsLocked == false)
+                {
+                    cursor.SetCursorToDoor();
+                }
+                else if (IsLocked == true)
+                {
+                    cursor.SetCursorToLocked();
+                }
+            }
+        }
 
-        Rotating = true;
+        public void Activate()
+        {
+            if (DoorClosed)
+                Open();
+            else
+                Close();
+        }
+
+        void Move()
+        {
+            CurrentLerpTime += Time.deltaTime * MoveSpeed;
+            if (CurrentLerpTime > LerpTime)
+            {
+                CurrentLerpTime = LerpTime;
+            }
+
+            float _Perc = CurrentLerpTime / LerpTime;
+
+            for (int i = 0; i < gates.Count; i++)
+            {
+                gates[i].transform.localRotation = Quaternion.Lerp(StartRotations[i], EndRotations[i], _Perc);
+            }
+
+            if (CurrentLerpTime == LerpTime)
+            {
+                Moving = false;
+            }
+        }
+
+        void Open()
+        {
+            DoorClosed = false;
+            CurrentLerpTime = 0;
+            Moving = true;
+        }
+
+        void Close()
+        {
+            DoorClosed = true;
+            CurrentLerpTime = 0;
+            Moving = true;
+        }
     }
 }
