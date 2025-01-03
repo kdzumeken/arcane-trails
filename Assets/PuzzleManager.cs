@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class PuzzleManager : MonoBehaviour
 {
     public LampController[] lamps; // Array lampu-lampu
+    
     public GameObject chest; // Peti yang akan terbuka
     public List<int> correctSequence = new List<int>(); // Urutan yang benar, bisa diatur di Inspector
     private List<int> playerSequence = new List<int>(); // Urutan yang dimasukkan pemain
