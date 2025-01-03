@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,14 @@ public class HealthBarUI : MonoBehaviour
     public Color midHealthColor = Color.yellow; // Kuning untuk kesehatan sedang
     public Color lowHealthColor = new Color(1f, 0.65f, 0f); // Oranye untuk kesehatan rendah
     public Color criticalHealthColor = Color.red; // Merah untuk kesehatan kritis
+
+    void Start()
+    {
+        if (slider == null || fillImage == null)
+        {
+            Debug.LogError("Slider or Fill Image is not assigned in HealthBarUI!");
+        }
+    }
 
     public void SetMaxHealth(int maxHealth)
     {
@@ -37,11 +46,12 @@ public class HealthBarUI : MonoBehaviour
         UpdateColor();         // Perbarui warna
     }
 
-    private void UpdateColor()
+    public void UpdateColor()
     {
         if (slider == null || fillImage == null) return;
 
         float healthPercentage = slider.value / slider.maxValue; // Hitung persentase kesehatan
+        Debug.Log("Health Percentage: " + healthPercentage);
 
         // Tentukan warna berdasarkan persentase kesehatan
         if (healthPercentage > 0.7f)

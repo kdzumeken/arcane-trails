@@ -40,6 +40,6 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         Debug.Log(gameObject.name + " is dead!");
-        Destroy(gameObject); // Hapus musuh dari scene
-    }
+        Destroy(gameObject); // Hapus musuh dari scene
+    }
 }

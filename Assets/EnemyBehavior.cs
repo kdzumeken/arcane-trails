@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class EnemyBehavior : MonoBehaviour
     private float freezeTimer = 0f;
 
     private bool isReturning = false;
+    private float returnTimer = 3f; // Timer untuk kembali ke posisi spawn
 
     public HealthBarUI healthBar; // Health bar musuh
     public Color freezeColor = Color.blue;
@@ -62,6 +64,7 @@ public class EnemyBehavior : MonoBehaviour
         if (distanceToPlayer <= detectionRadius)
         {
             isReturning = false;
+            returnTimer = 3f; // Reset timer saat mengejar
 
             if (distanceToPlayer > attackRange)
             {
@@ -76,14 +79,18 @@ public class EnemyBehavior : MonoBehaviour
 
                 if (Time.time - lastAttackTime >= attackCooldown)
                 {
-                    AttackPlayer();
                     lastAttackTime = Time.time;
+                    AttackPlayer();
                 }
             }
         }
         else if (isReturning)
         {
-            ReturnToSpawn();
+            returnTimer -= Time.deltaTime;
+            if (returnTimer <= 0)
+            {
+                ReturnToSpawn();
+            }
         }
         else
         {
@@ -102,11 +109,30 @@ public class EnemyBehavior : MonoBehaviour
 
     void AttackPlayer()
     {
+        if (isFrozen) return; // Abaikan jika musuh sedang freeze
+
         Vector3 direction = (player.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
 
-        Debug.Log("Enemy is attacking!");
+        animator.SetTrigger("attack"); // Trigger animasi serangan
+
+        // Terapkan damage setelah animasi selesai
+        Invoke(nameof(ApplyDamageToPlayer), 0.5f); // Sesuaikan 0.5f dengan durasi animasi serangan
+    }
+
+    void ApplyDamageToPlayer()
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        if (distanceToPlayer <= attackRange)
+        {
+            WizardHealth playerHealth = player.GetComponent<WizardHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(attackDamage);
+                Debug.Log("Player took damage: " + attackDamage);
+            }
+        }
     }
 
     void Idle()
@@ -176,7 +202,7 @@ public class EnemyBehavior : MonoBehaviour
 
         if (healthBar != null)
         {
-            healthBar.fillImage.color = normalColor;
+            healthBar.UpdateColor(); // Perbarui warna health bar sesuai kondisi darah
         }
     }
 
