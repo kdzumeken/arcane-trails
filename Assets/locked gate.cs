@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace SunTemple
 {
@@ -13,6 +14,7 @@ namespace SunTemple
         public string playerTag = "Player";
         public string requiredItem = "Key"; // Item required to unlock the gate
         public List<GameObject> gates; // List of gate objects
+        public Collider gateCollider; // Collider used to detect player
 
         private GameObject Player;
         private Camera Cam;
@@ -26,6 +28,10 @@ namespace SunTemple
 
         private bool scriptIsEnabled = true;
         private bool playerInRange = false;
+
+        // UI Elements
+        public TextMeshProUGUI interactionText;
+        public TextMeshProUGUI lockedText;
 
         void Start()
         {
@@ -67,6 +73,17 @@ namespace SunTemple
             {
                 cursor.SetCursorToDefault();
             }
+
+            // Hide UI elements initially
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(false);
+            }
         }
 
         void Update()
@@ -92,9 +109,14 @@ namespace SunTemple
 
         void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag(playerTag))
+            if (gateCollider.enabled && other.CompareTag(playerTag))
             {
                 playerInRange = true;
+                if (interactionText != null)
+                {
+                    interactionText.gameObject.SetActive(true);
+                    interactionText.text = "Press 'E' to open";
+                }
             }
         }
 
@@ -103,6 +125,14 @@ namespace SunTemple
             if (other.CompareTag(playerTag))
             {
                 playerInRange = false;
+                if (interactionText != null)
+                {
+                    interactionText.gameObject.SetActive(false);
+                }
+                if (lockedText != null)
+                {
+                    lockedText.gameObject.SetActive(false);
+                }
                 if (cursor != null)
                 {
                     cursor.SetCursorToDefault();
@@ -112,21 +142,108 @@ namespace SunTemple
 
         void TryToOpen()
         {
+            if (!gateCollider.enabled) return;
+
             Inventory inventory = Player.GetComponent<Inventory>();
             if (inventory != null && inventory.items.Contains(requiredItem))
             {
                 if (IsLocked == false)
                 {
                     Activate();
-                    // Remove the used item from the inventory
-                    inventory.items.Remove(requiredItem);
+                    // Remove the used item and all other items from the inventory
+                    RemoveItemAndAllRelated(inventory, requiredItem);
                     Debug.Log(requiredItem + " has been used and removed from the inventory.");
+                    // Hide interactionText and lockedText permanently
+                    if (interactionText != null)
+                    {
+                        interactionText.gameObject.SetActive(false);
+                    }
+                    if (lockedText != null)
+                    {
+                        lockedText.gameObject.SetActive(false);
+                    }
+                    // Disable the collider to prevent further triggers
+                    if (gateCollider != null)
+                    {
+                        gateCollider.enabled = false;
+                    }
+                    // Disable colliders on all gate objects
+                    foreach (var gate in gates)
+                    {
+                        Collider gateObjCollider = gate.GetComponent<Collider>();
+                        if (gateObjCollider != null)
+                        {
+                            gateObjCollider.enabled = false;
+                        }
+                    }
                 }
             }
             else
             {
+                if (lockedText != null)
+                {
+                    string displayName = GetItemDisplayNameFromInteractable(requiredItem);
+                    lockedText.text = $"Gate is Locked. {displayName} needed.";
+                    StartCoroutine(ShowLockedText());
+                }
                 Debug.Log("You need a " + requiredItem + " to open this gate.");
             }
+        }
+
+        IEnumerator ShowLockedText()
+        {
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(true);
+            }
+            yield return new WaitForSeconds(3);
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(false);
+            }
+            if (interactionText != null && playerInRange)
+            {
+                interactionText.gameObject.SetActive(true);
+            }
+        }
+
+        // Function to remove the specified item and all related data from the inventory
+        void RemoveItemAndAllRelated(Inventory inventory, string itemName)
+        {
+            int index = inventory.items.IndexOf(itemName);
+            if (index >= 0)
+            {
+                // Remove the item and its associated elements from all lists
+                inventory.items.RemoveAt(index);
+                inventory.itemObjects.RemoveAt(index);
+                inventory.itemSprites.RemoveAt(index);
+                inventory.displayNames.RemoveAt(index);
+
+                // Optionally, deactivate or destroy the associated GameObject if required
+                GameObject itemObject = inventory.itemObjects[index];
+                if (itemObject != null)
+                {
+                    itemObject.SetActive(true); // You can destroy it if needed: Destroy(itemObject);
+                }
+                Debug.Log(itemName + " has been completely removed from the inventory.");
+            }
+        }
+
+        string GetItemDisplayNameFromInteractable(string itemName)
+        {
+            InteractableObject[] interactables = FindObjectsOfType<InteractableObject>();
+            foreach (var interactable in interactables)
+            {
+                if (interactable.itemName == itemName)
+                {
+                    return interactable.displayName;
+                }
+            }
+            return itemName;
         }
 
         void CursorHint()
@@ -150,6 +267,22 @@ namespace SunTemple
                 Open();
             else
                 Close();
+
+            // Ensure UI elements are disabled after opening the gate
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(false);
+            }
+
+            // Ensure the gate collider on this GameObject is disabled
+            if (gateCollider != null)
+            {
+                gateCollider.enabled = false;
+            }
         }
 
         void Move()

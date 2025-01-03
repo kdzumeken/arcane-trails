@@ -2,32 +2,56 @@ using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
 {
-    public Collider doorBlocker;  // Collider yang menghalangi pintu
-    private bool isUnlocked = false;
+    public DialogueManager dialogueManager;
+    public GameObject door;
+    public Outline outline; // Reference to the Outline component
 
-    private void Start()
+    void Start()
     {
-        if (doorBlocker != null)
+        // Ensure the outline is initially disabled
+        if (outline != null)
         {
-            doorBlocker.enabled = true;  // Pintu terkunci awalnya
+            outline.enabled = false;
         }
     }
 
-    public void UnlockDoor()
+    void OnMouseDown()
     {
-        isUnlocked = true;
-        if (doorBlocker != null)
+        if (Vector3.Distance(transform.position, Camera.main.transform.position) < 5f)
         {
-            doorBlocker.enabled = false;  // Nonaktifkan blocker saat pintu terbuka
+            // Only trigger dialogue if final dialogue has not been triggered yet
+            if (!dialogueManager.HasTriggeredFinalDialogue())
+            {
+                dialogueManager.StartDialogue();
+                dialogueManager.dialogueUI.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("Final dialogue has already been triggered, door interaction blocked.");
+            }
         }
-        Debug.Log("Pintu terbuka!");
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnMouseEnter()
     {
-        if (other.CompareTag("wizard") && !isUnlocked)
+        // Enable the outline when the mouse enters the object
+        if (outline != null)
         {
-            Debug.Log("Pintu terkunci. Selesaikan quiz!");
+            outline.enabled = true;
         }
+    }
+
+    void OnMouseExit()
+    {
+        // Disable the outline when the mouse exits the object
+        if (outline != null)
+        {
+            outline.enabled = false;
+        }
+    }
+
+    public void OpenDoor()
+    {
+        door.GetComponent<Animator>().SetTrigger("Open");
     }
 }

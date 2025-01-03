@@ -9,7 +9,6 @@ public class Wizard : MonoBehaviour
     public float kecepatan = 3f;
     public float rotasiKecepatan = 5f;
     public float kecepatanLari = 6f; // Kecepatan saat berlari
-    public float jumpForce = 5f; // Kekuatan lompatan
     private Vector3 moveAmount;
     private Rigidbody rb;
 
@@ -90,12 +89,6 @@ public class Wizard : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         rotasiHorizontal += mouseX * rotasiKecepatan;
         transform.rotation = Quaternion.Euler(0f, rotasiHorizontal, 0f);
-
-        // Cek jika tombol spasi ditekan untuk lompat
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
     }
 
     void HandleInteraction()
@@ -118,9 +111,13 @@ public class Wizard : MonoBehaviour
                     Inventory inventory = FindObjectOfType<Inventory>();
                     if (inventory != null)
                     {
-                        inventory.AddItem(interactable.itemName);
-                        Destroy(interactable.gameObject); // Hapus objek setelah diambil
-                        Debug.Log($"Item '{interactable.itemName}' ditambahkan ke inventory.");
+                        // Tambahkan item ke inventory
+                        inventory.AddItem(interactable.itemName, interactable.itemObject, interactable.itemSprite, interactable.displayName);
+
+                        // Nonaktifkan objek setelah diambil
+                        interactable.gameObject.SetActive(false);
+
+                        Debug.Log($"Item '{interactable.displayName}' ditambahkan ke inventory.");
                     }
                 }
             }
@@ -131,25 +128,17 @@ public class Wizard : MonoBehaviour
         }
     }
 
-    void Jump()
+    public void EnablePointerMode()
     {
-        if (IsGrounded())
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            anim.SetTrigger("lompat");
-        }
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        crosshair.gameObject.SetActive(false); // Hide the crosshair
     }
 
-    bool IsGrounded()
+    public void DisablePointerMode()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
-        {
-            if (hit.collider.CompareTag("Ground"))
-            {
-                return true;
-            }
-        }
-        return false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        crosshair.gameObject.SetActive(true); // Show the crosshair
     }
 }

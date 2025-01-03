@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace SunTemple
 {
@@ -28,6 +29,10 @@ namespace SunTemple
 
         private bool scriptIsEnabled = true;
         private bool playerInRange = false;
+
+        // UI Elements
+        public TextMeshProUGUI interactionText;
+        public TextMeshProUGUI lockedText;
 
         void Start()
         {
@@ -63,6 +68,17 @@ namespace SunTemple
             {
                 cursor.SetCursorToDefault();
             }
+
+            // Hide UI elements initially
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(false);
+            }
         }
 
         void Update()
@@ -91,6 +107,11 @@ namespace SunTemple
             if (other.CompareTag(playerTag))
             {
                 playerInRange = true;
+                if (interactionText != null)
+                {
+                    interactionText.gameObject.SetActive(true);
+                    interactionText.text = "Press 'E' to open";
+                }
             }
         }
 
@@ -99,6 +120,14 @@ namespace SunTemple
             if (other.CompareTag(playerTag))
             {
                 playerInRange = false;
+                if (interactionText != null)
+                {
+                    interactionText.gameObject.SetActive(false);
+                }
+                if (lockedText != null)
+                {
+                    lockedText.gameObject.SetActive(false);
+                }
                 if (cursor != null)
                 {
                     cursor.SetCursorToDefault();
@@ -128,7 +157,33 @@ namespace SunTemple
             }
             else
             {
+                if (lockedText != null)
+                {
+                    lockedText.text = $"Door is Locked. {requiredItem} needed.";
+                    StartCoroutine(ShowLockedText());
+                }
                 Debug.Log("You need a " + requiredItem + " to open this door.");
+            }
+        }
+
+        IEnumerator ShowLockedText()
+        {
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(true);
+            }
+            yield return new WaitForSeconds(3);
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(false);
+            }
+            if (interactionText != null && playerInRange)
+            {
+                interactionText.gameObject.SetActive(true);
             }
         }
 
