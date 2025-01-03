@@ -1,19 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace SunTemple
 {
     public class Altar : MonoBehaviour
     {
-        public string requiredItem = "Statue"; // Item required for the right altar
+        public string requiredItem = "Statue"; // Item required for the altar
         public Transform itemPosition; // Position where the item will be placed
         private bool itemPlaced = false;
         private bool playerInRange = false;
 
+        // UI Elements
+        public TextMeshProUGUI interactionText;
+        public TextMeshProUGUI lockedText;
+
+        // Collider
+        public Collider altarCollider; // Collider used to detect player
+
         public bool IsItemPlaced()
         {
             return itemPlaced;
+        }
+
+        private void Start()
+        {
+            // Ensure UI elements are hidden initially
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(false);
+            }
+
+            // Check if altarCollider is assigned
+            if (altarCollider == null)
+            {
+                Debug.LogWarning(this.GetType().Name + ".cs on " + gameObject.name + " has no Collider assigned", gameObject);
+            }
         }
 
         void Update()
@@ -28,8 +56,13 @@ namespace SunTemple
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player entered right altar trigger area.");
+                Debug.Log("Player entered altar trigger area.");
                 playerInRange = true;
+                if (interactionText != null)
+                {
+                    interactionText.gameObject.SetActive(true);
+                    interactionText.text = "Press 'E' to place The Boulder";
+                }
             }
         }
 
@@ -37,8 +70,16 @@ namespace SunTemple
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player exited right altar trigger area.");
+                Debug.Log("Player exited altar trigger area.");
                 playerInRange = false;
+                if (interactionText != null)
+                {
+                    interactionText.gameObject.SetActive(false);
+                }
+                if (lockedText != null)
+                {
+                    lockedText.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -55,18 +96,59 @@ namespace SunTemple
                     // Place the item in the scene
                     GameObject itemObject = new GameObject(requiredItem);
                     itemObject.transform.position = itemPosition.position;
-                    Debug.Log(requiredItem + " has been placed on the right altar.");
+                    Debug.Log(requiredItem + " has been placed on the altar.");
 
                     itemPlaced = true;
+
+                    // Hide interactionText and lockedText permanently
+                    if (interactionText != null)
+                    {
+                        interactionText.gameObject.SetActive(false);
+                    }
+                    if (lockedText != null)
+                    {
+                        lockedText.gameObject.SetActive(false);
+                    }
+                    // Disable the collider to prevent further triggers
+                    if (altarCollider != null)
+                    {
+                        altarCollider.enabled = false;
+                    }
                 }
                 else
                 {
+                    if (lockedText != null)
+                    {
+                        lockedText.text = $"{requiredItem} not found in inventory.";
+                        StartCoroutine(ShowLockedText());
+                    }
                     Debug.Log("Required item " + requiredItem + " not found in inventory.");
                 }
             }
             else
             {
                 Debug.Log("Inventory component not found on player.");
+            }
+        }
+
+        IEnumerator ShowLockedText()
+        {
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(true);
+            }
+            yield return new WaitForSeconds(3);
+            if (lockedText != null)
+            {
+                lockedText.gameObject.SetActive(false);
+            }
+            if (interactionText != null && playerInRange)
+            {
+                interactionText.gameObject.SetActive(true);
             }
         }
 

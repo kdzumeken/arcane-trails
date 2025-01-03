@@ -9,7 +9,6 @@ public class Wizard : MonoBehaviour
     public float kecepatan = 3f;
     public float rotasiKecepatan = 5f;
     public float kecepatanLari = 6f; // Kecepatan saat berlari
-    public float jumpForce = 5f; // Kekuatan lompatan
     private Vector3 moveAmount;
     private Rigidbody rb;
 
@@ -90,12 +89,6 @@ public class Wizard : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         rotasiHorizontal += mouseX * rotasiKecepatan;
         transform.rotation = Quaternion.Euler(0f, rotasiHorizontal, 0f);
-
-        // Cek jika tombol spasi ditekan untuk lompat
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
     }
 
     void HandleInteraction()
@@ -135,29 +128,6 @@ public class Wizard : MonoBehaviour
         }
     }
 
-
-    void Jump()
-    {
-        if (IsGrounded())
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            anim.SetTrigger("lompat");
-        }
-    }
-
-    bool IsGrounded()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
-        {
-            if (hit.collider.CompareTag("Ground"))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void EnablePointerMode()
     {
         Cursor.lockState = CursorLockMode.None;
@@ -171,6 +141,4 @@ public class Wizard : MonoBehaviour
         Cursor.visible = false;
         crosshair.gameObject.SetActive(true); // Show the crosshair
     }
-
-
 }

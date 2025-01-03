@@ -7,6 +7,7 @@ public class LampController : MonoBehaviour
     public Color offColor = Color.black; // Warna saat lampu mati
     private bool isOn = false; // Status lampu (Menyala/Mati)
     public PuzzleManager puzzleManager; // Reference to the PuzzleManager, assign in Inspector
+    private Outline outline; // Reference to the Outline component
 
     private void Start()
     {
@@ -14,6 +15,17 @@ public class LampController : MonoBehaviour
         if (puzzleManager == null)
         {
             Debug.LogError("PuzzleManager is not assigned to the LampController on " + gameObject.name);
+        }
+
+        // Get the Outline component
+        outline = GetComponent<Outline>();
+        if (outline == null)
+        {
+            Debug.LogError("Outline component is not assigned to the LampController on " + gameObject.name);
+        }
+        else
+        {
+            outline.enabled = false; // Disable outline initially
         }
     }
 
@@ -40,6 +52,22 @@ public class LampController : MonoBehaviour
         if (lampIndex != -1)
         {
             puzzleManager.LampPressed(lampIndex);
+        }
+    }
+
+    private void OnMouseEnter()
+    {
+        if (outline != null)
+        {
+            outline.enabled = true; // Enable outline when mouse enters
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (outline != null)
+        {
+            outline.enabled = false; // Disable outline when mouse exits
         }
     }
 }
