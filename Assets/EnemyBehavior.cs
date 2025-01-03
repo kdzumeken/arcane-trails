@@ -206,15 +206,6 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Throwable"))
-        {
-            Destroy(collision.gameObject);
-            Freeze(5f);
-        }
-    }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
