@@ -6,9 +6,6 @@ TagManager:
   tags:
   - Fire
   - Ground
-  - Throwable
-  - Musuh
-  - Enemy
   layers:
   - Default
   - TransparentFX
