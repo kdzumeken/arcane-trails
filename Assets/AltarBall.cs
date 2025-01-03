@@ -36,7 +36,7 @@ namespace SunTemple
         {
             if (playerInRange && Input.GetKeyDown(KeyCode.E))
             {
-                TryToPlaceItem();
+                TryToPlaceAllItems();
             }
         }
 
@@ -46,7 +46,7 @@ namespace SunTemple
             {
                 playerInRange = true;
                 interactionText?.gameObject.SetActive(true);
-                interactionText.text = "Press 'E' to place an item";
+                interactionText.text = "Press 'E' to place items";
             }
         }
 
@@ -60,11 +60,12 @@ namespace SunTemple
             }
         }
 
-        void TryToPlaceItem()
+        void TryToPlaceAllItems()
         {
             Inventory inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
             if (inventory != null)
             {
+                bool itemPlaced = false;
                 foreach (string item in requiredItems)
                 {
                     if (inventory.items.Contains(item) && !placedItems.Contains(item))
@@ -73,14 +74,29 @@ namespace SunTemple
                         placedItems.Add(item);
                         GameObject itemObject = new GameObject(item);
                         itemObject.transform.position = itemPosition.position;
+                        itemPlaced = true;
                         Debug.Log(item + " placed on the altar.");
-                        return;
+
+                        // Hide interactionText and lockedText permanently
+                        if (interactionText != null)
+                        {
+                            interactionText.gameObject.SetActive(false);
+                        }
+                        if (lockedText != null)
+                        {
+                            lockedText.gameObject.SetActive(false);
+                        }
+                        // Disable the collider to prevent further triggers
+                        if (altarCollider != null)
+                        {
+                            altarCollider.enabled = false;
+                        }
                     }
                 }
 
-                if (lockedText != null)
+                if (!itemPlaced && lockedText != null)
                 {
-                    lockedText.text = "Required item not found in inventory.";
+                    lockedText.text = "Required items not found in inventory.";
                     StartCoroutine(ShowLockedText());
                 }
             }
