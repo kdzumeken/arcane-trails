@@ -34771,7 +34771,7 @@ MonoBehaviour:
   - {fileID: 1081533919}
   - {fileID: 555361344}
   chest: {fileID: 2091641516}
-  correctSequence: 01000000030000000200000000000000
+  correctSequence: 01000000030000000000000002000000
   lampPressSound: {fileID: 8300000, guid: 7905420debc5acc4994d890c8e64d07d, type: 3}
   wrongSequenceSound: {fileID: 8300000, guid: dc845450c62e8bc4480f01a7748c3d6e, type: 3}
   puzzleSolvedSound: {fileID: 8300000, guid: 7be5f7be854604445b4194ca8cc2473e, type: 3}
