@@ -27014,6 +27014,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1851997851}
     m_Modifications:
+    - target: {fileID: 1996075007820526983, guid: c9728a2ee3cb8e445abe06f40b95a9f4, type: 3}
+      propertyPath: m_text
+      value: 'Eka, are you okay?
+
+
+
+        Sorry I couldn''t testify much when the
+        villagers caught you. I knew you''re innocent, I know. I''ll do everything
+        I can to prove your innocence. In the meantime I managed to find a safe escape
+        route so I snuck some journals along the way.
+
+
+
+        Heard they took
+        your spellbook as well. Don''t worry just use the spell I write here
+
+
+
+        "The
+        shining fire at dawn, the bright sun during the day, the fresh leaves in
+        the afternoon, and the calm sky at night."
+
+
+
+        Love, Erpa
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 4298111953201646970, guid: c9728a2ee3cb8e445abe06f40b95a9f4, type: 3}
       propertyPath: m_Name
       value: ImagePuzzel-1
@@ -29085,7 +29113,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1996075007820526983, guid: c9728a2ee3cb8e445abe06f40b95a9f4, type: 3}
       propertyPath: m_text
-      value: "So this is it. I hope you read this, Arya. Whatever beyond these doors,
+      value: "So this is it. I hope you read this, Eka. Whatever beyond these doors,
         I don\u2019t think my words could carry. you will be\u2026 alone. I have
         changed, and so have you. Whatever happens now is up to you. I will try my
         best with the situation outside. it has calmed quite a bit. Hope I can see
