@@ -11676,7 +11676,8 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 2062250267}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2485508173368047547, guid: d5ddfcd6e5e3ab345b2c8cc723737d79, type: 3}
     m_RemovedGameObjects:
     - {fileID: 8936975993982818374, guid: d5ddfcd6e5e3ab345b2c8cc723737d79, type: 3}
     m_AddedGameObjects:
@@ -17695,7 +17696,11 @@ PrefabInstance:
     - target: {fileID: 6951054444254835965, guid: cf676c803d59c8d418a5bf82798cce39, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 2062250260}
+      objectReference: {fileID: 1465165183}
+    - target: {fileID: 6951054444254835965, guid: cf676c803d59c8d418a5bf82798cce39, type: 3}
+      propertyPath: offset.y
+      value: 1.2
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6128829078096465168, guid: cf676c803d59c8d418a5bf82798cce39, type: 3}
     m_RemovedGameObjects: []
@@ -17708,11 +17713,6 @@ PrefabInstance:
 --- !u!224 &2062250259 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1769230776365725861, guid: cf676c803d59c8d418a5bf82798cce39, type: 3}
-  m_PrefabInstance: {fileID: 2062250257}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &2062250260 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2125010282694983833, guid: cf676c803d59c8d418a5bf82798cce39, type: 3}
   m_PrefabInstance: {fileID: 2062250257}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &2062250261 stripped
