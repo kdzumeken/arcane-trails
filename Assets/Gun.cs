@@ -6,7 +6,7 @@ public class Gun : MonoBehaviour
 {
     public Transform BulletSpawnPoint;
     public GameObject BulletPrefab;
-    public float bulletSpeed = 10f;
+    public float bulletSpeed = 100f;
     public float fireRate = 1f; // Waktu cooldown dalam detik
     private float nextFireTime = 1f;
 

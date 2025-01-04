@@ -23,7 +23,7 @@ public class EnemyBehavior : MonoBehaviour
     private bool isReturning = false;
     private float returnTimer = 3f; // Timer untuk kembali ke posisi spawn
 
-    public HealthBarUI healthBar; // Health bar musuh
+    public HealthBarMusuh healthBar; // Health bar musuh
     public Color freezeColor = Color.blue;
     public Color normalColor = Color.red;
 
@@ -100,6 +100,8 @@ public class EnemyBehavior : MonoBehaviour
 
     void ChasePlayer()
     {
+        if (isFrozen) return; // Abaikan jika musuh sedang freeze
+
         Vector3 direction = (player.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
@@ -143,6 +145,8 @@ public class EnemyBehavior : MonoBehaviour
 
     void ReturnToSpawn()
     {
+        if (isFrozen) return; // Abaikan jika musuh sedang freeze
+
         Vector3 direction = (spawnPoint.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
@@ -152,24 +156,14 @@ public class EnemyBehavior : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage; // Kurangi darah musuh
-
-        if (healthBar != null)
-        {
-            healthBar.SetHealth(currentHealth); // Perbarui health bar
-        }
-
         // Mainkan animasi damage
         if (animator != null)
         {
             animator.SetTrigger("damage");
         }
 
-        // Jika darah habis, musuh mati
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
+        // Bekukan musuh selama 20 detik
+        Freeze(20f);
     }
 
     void Die()
@@ -188,6 +182,7 @@ public class EnemyBehavior : MonoBehaviour
 
             animator.SetBool("ngejar", false);
             animator.SetBool("attack", false);
+            animator.SetBool("idle", true); // Set animasi idle saat freeze
 
             if (healthBar != null)
             {
@@ -204,6 +199,8 @@ public class EnemyBehavior : MonoBehaviour
         {
             healthBar.UpdateColor(); // Perbarui warna health bar sesuai kondisi darah
         }
+
+        animator.SetBool("idle", false); // Kembali ke animasi normal setelah unfreeze
     }
 
     private void OnDrawGizmosSelected()
