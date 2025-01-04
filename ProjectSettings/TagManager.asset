@@ -6,14 +6,15 @@ TagManager:
   tags:
   - Fire
   - Ground
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - tembok
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 

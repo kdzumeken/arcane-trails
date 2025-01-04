@@ -22,6 +22,8 @@ public class Wizard : MonoBehaviour
     // Referensi untuk objek yang disorot
     private InteractableObject highlightedObject;
 
+    private bool isInDialog = false;
+
     void Start()
     {
         anim = this.GetComponent<Animator>();
@@ -48,8 +50,11 @@ public class Wizard : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
-        HandleInteraction();
+        if (!isInDialog)
+        {
+            HandleMovement();
+            HandleInteraction();
+        }
     }
 
     void HandleMovement()
@@ -140,5 +145,18 @@ public class Wizard : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         crosshair.gameObject.SetActive(true); // Show the crosshair
+    }
+
+    public void SetDialogState(bool isInDialog)
+    {
+        this.isInDialog = isInDialog;
+        if (isInDialog)
+        {
+            EnablePointerMode();
+        }
+        else
+        {
+            DisablePointerMode();
+        }
     }
 }
