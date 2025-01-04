@@ -9779,7 +9779,7 @@ MonoBehaviour:
   OpenSideAmount: 3
   MoveSpeed: 1
   playerTag: Player
-  requiredItem: Book
+  requiredItem: Strange Book
   gates:
   - {fileID: 278134156}
   bookshelfCollider: {fileID: 516564117}
@@ -36339,7 +36339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0023137589d4b4c9bc4af6b55c83fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Book
+  itemName: Strange Book
   itemObject: {fileID: 561037334}
   itemSprite: {fileID: 21300000, guid: e9f3be4999fb97a48b8ccb668ff4117c, type: 3}
   displayName: Strange Book
