@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -15,8 +15,7 @@ public class EnemyBehavior : MonoBehaviour
     private float lastAttackTime;
 
     private Animator animator;
-    private Rigidbody rb;
-
+    private NavMeshAgent navAgent; // Menggunakan NavMeshAgent untuk navigasi
     private bool isFrozen = false;
     private float freezeTimer = 0f;
 
@@ -33,14 +32,14 @@ public class EnemyBehavior : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
-        currentHealth = maxHealth; // Inisialisasi darah musuh
-
-        if (rb != null)
+        navAgent = GetComponent<NavMeshAgent>();
+        if (navAgent != null)
         {
-            rb.isKinematic = true;
+            navAgent.speed = moveSpeed; // Kecepatan musuh
+            navAgent.angularSpeed = rotationSpeed * 100; // Kecepatan rotasi musuh
         }
 
+        currentHealth = maxHealth; // Inisialisasi darah musuh
         if (healthBar != null)
         {
             healthBar.SetMaxHealth(maxHealth); // Atur health bar penuh
@@ -100,23 +99,17 @@ public class EnemyBehavior : MonoBehaviour
 
     void ChasePlayer()
     {
-        if (isFrozen) return; // Abaikan jika musuh sedang freeze
+        if (isFrozen || navAgent == null) return;
 
-        Vector3 direction = (player.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        navAgent.isStopped = false;
+        navAgent.SetDestination(player.position); // Menentukan tujuan ke posisi player
     }
 
     void AttackPlayer()
     {
-        if (isFrozen) return; // Abaikan jika musuh sedang freeze
+        if (isFrozen || navAgent == null) return;
 
-        Vector3 direction = (player.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-
+        navAgent.isStopped = true; // Hentikan pergerakan saat menyerang
         animator.SetTrigger("attack"); // Trigger animasi serangan
 
         // Terapkan damage setelah animasi selesai
@@ -139,30 +132,30 @@ public class EnemyBehavior : MonoBehaviour
 
     void Idle()
     {
+        if (navAgent != null)
+        {
+            navAgent.isStopped = true; // Hentikan pergerakan saat idle
+        }
+
         animator.SetBool("ngejar", false);
         animator.SetBool("attack", false);
     }
 
     void ReturnToSpawn()
     {
-        if (isFrozen) return; // Abaikan jika musuh sedang freeze
+        if (isFrozen || navAgent == null) return;
 
-        Vector3 direction = (spawnPoint.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        navAgent.isStopped = false;
+        navAgent.SetDestination(spawnPoint.position); // Menentukan tujuan ke posisi spawn point
     }
 
     public void TakeDamage(int damage)
     {
-        // Mainkan animasi damage
         if (animator != null)
         {
             animator.SetTrigger("damage");
         }
 
-        // Bekukan musuh selama 20 detik
         Freeze(20f);
     }
 
@@ -182,11 +175,16 @@ public class EnemyBehavior : MonoBehaviour
 
             animator.SetBool("ngejar", false);
             animator.SetBool("attack", false);
-            animator.SetBool("idle", true); // Set animasi idle saat freeze
+            animator.SetBool("idle", true);
 
             if (healthBar != null)
             {
                 healthBar.fillImage.color = freezeColor;
+            }
+
+            if (navAgent != null)
+            {
+                navAgent.isStopped = true; // Hentikan pergerakan saat freeze
             }
         }
     }
@@ -200,7 +198,11 @@ public class EnemyBehavior : MonoBehaviour
             healthBar.UpdateColor(); // Perbarui warna health bar sesuai kondisi darah
         }
 
-        animator.SetBool("idle", false); // Kembali ke animasi normal setelah unfreeze
+        animator.SetBool("idle", false);
+        if (navAgent != null)
+        {
+            navAgent.isStopped = false;
+        }
     }
 
     private void OnDrawGizmosSelected()
