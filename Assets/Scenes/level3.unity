@@ -11664,6 +11664,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 254616047051030591, guid: d5ddfcd6e5e3ab345b2c8cc723737d79, type: 3}
+      propertyPath: m_Speed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 254616047051030591, guid: d5ddfcd6e5e3ab345b2c8cc723737d79, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -11675,6 +11679,10 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 2062250267}
+    - target: {fileID: 1887229704388326759, guid: d5ddfcd6e5e3ab345b2c8cc723737d79, type: 3}
+      propertyPath: moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1887229704388326759, guid: d5ddfcd6e5e3ab345b2c8cc723737d79, type: 3}
       propertyPath: spawnPoint
       value: 
