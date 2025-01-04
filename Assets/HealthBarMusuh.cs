@@ -13,10 +13,27 @@ public class HealthBarMusuh : MonoBehaviour
 
     void Start()
     {
-        if (slider == null || fillImage == null)
+        // Cari komponen otomatis jika tidak diatur di Inspector
+        if (slider == null)
         {
-            Debug.LogError("Slider or Fill Image is not assigned in HealthBarMusuh!");
+            slider = GetComponent<Slider>();
+            if (slider == null)
+            {
+                Debug.LogError("Slider component is missing in HealthBarMusuh!");
+            }
         }
+
+        if (fillImage == null && slider != null)
+        {
+            fillImage = slider.fillRect.GetComponent<Image>();
+            if (fillImage == null)
+            {
+                Debug.LogError("Fill Image is missing in HealthBarMusuh!");
+            }
+        }
+
+        // Set warna awal
+        UpdateColor();
     }
 
     public void SetMaxHealth(int maxHealth)
@@ -40,7 +57,7 @@ public class HealthBarMusuh : MonoBehaviour
             return;
         }
 
-        slider.value = health; // Update nilai health
+        slider.value = Mathf.Clamp(health, 0, slider.maxValue); // Batasan nilai health
         UpdateColor();         // Perbarui warna
     }
 
@@ -54,6 +71,6 @@ public class HealthBarMusuh : MonoBehaviour
     {
         if (slider == null || fillImage == null) return;
 
-        fillImage.color = isFrozen ? freezeColor : normalColor; // Ubah warna berdasarkan status freeze
-    }
+        fillImage.color = isFrozen ? freezeColor : normalColor; // Ubah warna berdasarkan status freeze
+    }
 }

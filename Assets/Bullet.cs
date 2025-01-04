@@ -21,6 +21,7 @@ public class Bullet : MonoBehaviour
             {
                 Debug.Log($"Damage applied to {other.gameObject.name}");
                 enemyHealth.TakeDamage((int)damage); // Convert float to int
+                enemyHealth.Freeze(20f); // Memicu efek freeze selama 20 detik
             }
             else
             {

@@ -1,28 +1,21 @@
 using UnityEngine;
-using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int maxHealth = 50; // Maksimum darah musuh
-    private int currentHealth; // Darah saat ini
+    public int maxHealth = 50;
+    private int currentHealth;
 
-    public HealthBarMusuh healthBar; // Referensi ke health bar
-    private Animator animator; // Referensi ke komponen Animator
-    private bool isFrozen = false; // Status freeze
-    private float freezeTimer = 0f; // Timer untuk freeze
+    public HealthBarMusuh healthBar;
+    private Animator animator;
+    private bool isFrozen = false;
+    private float freezeTimer = 0f;
 
     void Start()
     {
-        if (healthBar == null)
-        {
-            Debug.LogError("HealthBarUI is not assigned in EnemyHealth!");
-            return;
-        }
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
 
-        currentHealth = maxHealth;           // Inisialisasi darah penuh
-        healthBar.SetMaxHealth(maxHealth);   // Set health bar penuh
-
-        animator = GetComponent<Animator>(); // Inisialisasi komponen Animator
+        animator = GetComponent<Animator>();
         if (animator == null)
         {
             Debug.LogError("Animator is not assigned in EnemyHealth!");
@@ -43,19 +36,17 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (healthBar == null)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
-            Debug.LogError("HealthBarUI is not assigned in EnemyHealth!");
-            return;
+            currentHealth = 1; // Musuh tidak mati, tetap hidup dengan 1 HP
         }
 
-        // Mainkan animasi damage
         if (animator != null)
         {
             animator.SetTrigger("damage");
         }
 
-        // Bekukan musuh selama 20 detik
         Freeze(20f);
     }
 
@@ -66,12 +57,14 @@ public class EnemyHealth : MonoBehaviour
             isFrozen = true;
             freezeTimer = duration;
 
+            // Hentikan animasi attack dan ngejar, dan atur animasi idle
             animator.SetBool("ngejar", false);
             animator.SetBool("attack", false);
+            animator.SetBool("idle", true);
 
             if (healthBar != null)
             {
-                healthBar.fillImage.color = Color.blue; // Ubah warna health bar saat freeze
+                healthBar.fillImage.color = new Color(0.6f, 0.8f, 1f);
             }
         }
     }
@@ -82,13 +75,14 @@ public class EnemyHealth : MonoBehaviour
 
         if (healthBar != null)
         {
-            healthBar.UpdateColor(); // Perbarui warna health bar sesuai kondisi darah
+            healthBar.UpdateColor();
         }
+
+        animator.SetBool("idle", false);
     }
 
-    void Die()
+    public bool IsFrozen()
     {
-        Debug.Log(gameObject.name + " is dead!");
-        Destroy(gameObject); // Hapus musuh dari scene
+        return isFrozen;
     }
 }
